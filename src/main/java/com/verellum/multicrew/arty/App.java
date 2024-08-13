@@ -24,10 +24,10 @@ public class App
         Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
 
         String path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
-        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
+        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl_test4.png";
         String path3 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
-        String[] paths = {path1, path2, path3};
-        new AKAZEMatch().run(paths);
+        String[] paths = {path2, path1};
+        new TemplateMatch().run(paths);
     }
     
     
