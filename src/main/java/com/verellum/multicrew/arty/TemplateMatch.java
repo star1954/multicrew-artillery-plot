@@ -82,7 +82,9 @@ class TemplateMatch implements ChangeListener {
         } else {
             matchLoc = mmr.maxLoc;
         }
- 
+
+        //TODO: Return coordinates(or otherwise expose them)
+        //+tmpl.cols()/2, +tmpl.rows()/2
         Imgproc.rectangle(img_display, matchLoc, new Point(matchLoc.x + templ.cols(), matchLoc.y + templ.rows()),
                 new Scalar(0, 0, 0), 2, 8, 0);
         Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + templ.cols(), matchLoc.y + templ.rows()),
