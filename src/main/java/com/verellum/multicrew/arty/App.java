@@ -1,5 +1,7 @@
 package com.verellum.multicrew.arty;
 
+import nu.pattern.OpenCV;
+
 /**
  * Hello world!
  *
@@ -8,6 +10,10 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        OpenCV.loadLocally();
+        
+
     }
+    CV_Interface cvo = new CV_Interface();
+    
 }
