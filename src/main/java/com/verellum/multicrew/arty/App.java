@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.Scanner;
 
+import org.opencv.core.Mat;
+import org.opencv.highgui.HighGui;
+import org.opencv.imgcodecs.Imgcodecs;
+
 import nu.pattern.OpenCV;
 
 /**
@@ -14,15 +18,16 @@ import nu.pattern.OpenCV;
 public class App 
 {
 
-    public static void main( String[] args ) throws URISyntaxException, FileNotFoundException
+    public static void main( String[] args ) throws URISyntaxException, FileNotFoundException, InterruptedException
     {
         OpenCV.loadLocally();
-        CV_Interface cvo = new CV_Interface();
-        File file = new File(App.class.getResource("maps/test.txt").toURI());
-        Scanner sc = new Scanner(file);
-        
-        System.out.println(sc.nextLine());
-        sc.close();
+        Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
+
+        String path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
+        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
+        String path3 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
+        String[] paths = {path1, path2, path3};
+        new AKAZEMatch().run(paths);
     }
     
     
