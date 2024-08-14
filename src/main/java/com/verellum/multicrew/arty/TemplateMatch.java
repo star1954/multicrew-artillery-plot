@@ -3,23 +3,17 @@ package com.verellum.multicrew.arty;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
-import org.bytedeco.javacv.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.FloatIndexer;
 
-import org.bytedeco.opencv.opencv_calib3d.*;
 import org.bytedeco.opencv.opencv_core.*;
-import org.bytedeco.opencv.opencv_highgui.*;
-import org.bytedeco.opencv.opencv_imgproc.*;
-import org.bytedeco.opencv.opencv_objdetect.*;
-import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_highgui.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
-import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
 /**
  * Example of template javacv (opencv) template matching using the last java build
@@ -35,26 +29,26 @@ public class TemplateMatch {
         //read in image default colors
         Mat sourceColor = imread(args[0]);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
-       cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
-       //load in template in grey 
-       Mat template = imread(args[1],IMREAD_GRAYSCALE);//int = 0
-       //Size for the result image
-       Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
-       Mat result = new Mat(size, CV_32FC1);
-       matchTemplate(sourceGrey, template, result, TM_CCORR_NORMED);
+        cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
+        //load in template in grey 
+        Mat template = imread(args[1],IMREAD_GRAYSCALE);//int = 0
+        //Size for the result image
+        Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
+        Mat result = new Mat(size, CV_32FC1);
+        matchTemplate(sourceGrey, template, result, TM_CCORR_NORMED);
+        
+        DoublePointer minVal= new DoublePointer();
+        DoublePointer maxVal= new DoublePointer();
+        Point min = new Point();
+        Point max = new Point();
+        minMaxLoc(result, minVal, maxVal, min, max, null);
+        rectangle(sourceColor,new Rect(max.x(),max.y(),template.cols(),template.rows()), MathU.randColor(), 2, 0, 0);
        
-       DoublePointer minVal= new DoublePointer();
-       DoublePointer maxVal= new DoublePointer();
-       Point min = new Point();
-       Point max = new Point();
-       minMaxLoc(result, minVal, maxVal, min, max, null);
-       rectangle(sourceColor,new Rect(max.x(),max.y(),template.cols(),template.rows()), MathU.randColor(), 2, 0, 0);
-       
-       imshow("Original marked", sourceColor);
-       imshow("Ttemplate", template);
-       imshow("Results matrix", result);
-       waitKey(0);
-       destroyAllWindows();
+        imshow("Original marked", sourceColor);
+        //imshow("Ttemplate", template);
+        //imshow("Results matrix", result);
+        waitKey(0);
+        destroyAllWindows();
         
     }
     
@@ -122,5 +116,27 @@ public class TemplateMatch {
         cvReleaseImage(src);
         cvReleaseImage(tmp);
         cvReleaseImage(result);
+    }
+
+    public static Rectangle cropToMatch(BufferedImage bi, String templatePath){
+        //read in image default colors
+        // Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
+        Mat sourceColor = imread("temp/output.jpg");
+        Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
+        cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
+        //load template
+        Mat template = imread(templatePath ,IMREAD_GRAYSCALE);
+        //Size for the result image
+        Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
+        Mat result = new Mat(size, CV_32FC1);
+        matchTemplate(sourceGrey, template, result, TM_CCORR_NORMED);
+        
+        DoublePointer minVal= new DoublePointer();
+        DoublePointer maxVal= new DoublePointer();
+        Point min = new Point();
+        Point max = new Point();
+        minMaxLoc(result, minVal, maxVal, min, max, null);
+        rectangle(sourceColor,new Rect(max.x(),max.y(),template.cols(),template.rows()), MathU.randColor(), 2, 0, 0);
+        return new Rectangle(max.x(), max.y(), template.cols(), template.rows());
     }
 }
