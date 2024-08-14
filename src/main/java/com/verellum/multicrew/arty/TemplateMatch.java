@@ -36,12 +36,12 @@ public class TemplateMatch {
         Mat sourceColor = imread(args[0]);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
        cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
-       //load in template in grey 
-       Mat template = imread(args[1],IMREAD_GRAYSCALE);//int = 0
+       //load in template in color
+       Mat template = imread(args[1],IMREAD_COLOR);//int = 0
        //Size for the result image
        Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
        Mat result = new Mat(size, CV_32FC1);
-       matchTemplate(sourceGrey, template, result, TM_CCORR_NORMED);
+       matchTemplate(sourceColor, template, result, TM_CCORR_NORMED);
        
        DoublePointer minVal= new DoublePointer();
        DoublePointer maxVal= new DoublePointer();
