@@ -1,5 +1,7 @@
 package com.verellum.multicrew.arty;
 
+import java.awt.image.BufferedImage;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,8 +26,11 @@ public class MainController extends Controller {
     @FXML
     void screencap(ActionEvent event) {
         System.out.println("attempting capture!!!");
-        imageView.setImage(SwingFXUtils.toFXImage(sc.capture(), null));
-
+        BufferedImage bi = sc.capture();
+        imageView.setImage(SwingFXUtils.toFXImage(bi, null));
+        sc.output(bi);
+        App.paths[0] = "output.jpg";
+        new TemplateMatch().run(App.paths);
     }
 
     public ScreenCapture getsScreenCapture() {

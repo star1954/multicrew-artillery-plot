@@ -26,22 +26,19 @@ public class App extends Application
 
     private static ScreenCapture sc;
     private static Scene scene;
+    public static String[] paths = {null, null};
 
     public static void app(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException
     {
         OpenCV.loadLocally();
         Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
 
-        String path1 = "src/main/resources/com/verellum/multicrew/arty/icons/circle.png";
-        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test6.png";
+        String path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
+        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test4.png";
         String path3 = "src/main/resources/com/verellum/multicrew/arty/icons/circle_test2.png";
         String path4 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
-        String[] paths = {path2, path1, path3};
-        new TemplateMatch().run(paths);
-        /*paths[0] = path1;
-        paths[1] = path2;
-        paths[2] = path4;
-        new AKAZEMatch().run(paths);*/
+        //template goes second
+        paths[1] = path1;
         sc = new ScreenCapture();
         launch();
     }
