@@ -32,11 +32,16 @@ public class App extends Application
         OpenCV.loadLocally();
         Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
 
-        String path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
-        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl_test2.png";
-        String path3 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
-        String[] paths = {path1, path2, path3};
-        // new AKAZEMatch().run(paths);
+        String path1 = "src/main/resources/com/verellum/multicrew/arty/icons/circle.png";
+        String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test6.png";
+        String path3 = "src/main/resources/com/verellum/multicrew/arty/icons/circle_test2.png";
+        String path4 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
+        String[] paths = {path2, path1, path3};
+        new TemplateMatch().run(paths);
+        /*paths[0] = path1;
+        paths[1] = path2;
+        paths[2] = path4;
+        new AKAZEMatch().run(paths);*/
         sc = new ScreenCapture();
         launch();
     }
@@ -65,6 +70,7 @@ public class App extends Application
             ((MainController)fxmlLoader.getController()).setScreenCapture(sc);
         return par;
     }
+
     
     
 }
