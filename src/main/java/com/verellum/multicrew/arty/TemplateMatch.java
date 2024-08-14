@@ -11,20 +11,11 @@ import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
-/**
- * Example of template javacv (opencv) template matching using the last java build
- *
- * We need 2 default parameters like this (source image, image to find )
- * "C:\Users\Waldema\Desktop\bg.jpg" "C:\Users\Waldema\Desktop\imageToFind.jpg" 
- *
- * @author Waldemar Neto
- */
 public class TemplateMatch {
 
     public static Rectangle cropToMatch(BufferedImage bi, String templatePath){
         //read in image default colors
-        // Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
-        Mat sourceColor = imread("temp/output.jpg");
+        Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
         cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
         //load template
