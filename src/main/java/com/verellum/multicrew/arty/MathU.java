@@ -1,10 +1,13 @@
 package com.verellum.multicrew.arty;
 
+import org.bytedeco.opencv.opencv_core.Scalar;
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * <p>Utility class to contain calculations required for effective gunnery
  * <p>generously <i>borrowed</i> from the people at mtc-artillery (https://github.com/ari-party/mtc-artillery)
  */
-public class ArtyMath {
+public class MathU {
 
     //constants generously taken mtc-artillery :))
     private static final double G = 9.8 * 1.8;
@@ -39,5 +42,14 @@ public class ArtyMath {
         double theta = 45 * (Math.PI / 180);
         return Math.pow(velocity, 2) * (2 * Math.sin(theta) * Math.cos(theta)) / G;
     }
+
+    // some usefull things.
+    public static Scalar randColor(){
+        int b,g,r;
+        b= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+        g= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+        r= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+        return new Scalar (b,g,r,0);
+     }
 
 }

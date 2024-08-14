@@ -22,7 +22,7 @@ public class MainController extends Controller {
     void initialize() {
         
     }
-
+    
     @FXML
     void screencap(ActionEvent event) {
         System.out.println("attempting capture!!!");

@@ -11,6 +11,7 @@ public class Main {
     
     public static void main(String[] args) throws FileNotFoundException, URISyntaxException, InterruptedException {
         App.app(args);
+          
     }
 
 }
