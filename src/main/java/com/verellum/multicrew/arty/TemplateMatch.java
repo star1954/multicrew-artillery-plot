@@ -1,17 +1,13 @@
 package com.verellum.multicrew.arty;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.indexer.FloatIndexer;
 
 import org.bytedeco.opencv.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
-import static org.bytedeco.opencv.global.opencv_highgui.*;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
@@ -24,92 +20,6 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
  * @author Waldemar Neto
  */
 public class TemplateMatch {
-    
-    public static void newStyle(String[] args){
-        //read in image default colors
-        Mat sourceColor = imread(args[0]);
-        Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
-       cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
-       //load in template in color
-       Mat template = imread(args[1],IMREAD_COLOR);//int = 0
-       //Size for the result image
-       Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
-       Mat result = new Mat(size, CV_32FC1);
-       matchTemplate(sourceColor, template, result, TM_CCORR_NORMED);
-       
-        imshow("Original marked", sourceColor);
-        //imshow("Ttemplate", template);
-        //imshow("Results matrix", result);
-        waitKey(0);
-        destroyAllWindows();
-        
-    }
-    
-    public static List<Point> getPointsFromMatAboveThreshold(Mat m, float t){
-       List<Point> matches = new ArrayList<Point>();
-       FloatIndexer indexer = m.createIndexer();
-       for (int y = 0; y < m.rows(); y++) {
-            for (int x = 0; x < m.cols(); x++) {
-               if (indexer.get(y,x)>t) {
-              System.out.println("(" + x + "," + y +") = "+ indexer.get(y,x));
-              matches.add(new Point(x, y));
-          }
-         }
-       }
-       return matches;
-    }
-    
-    public static void oldStyle(String[] args){
-        //get color source image to draw red rect on later
-        IplImage srcColor = cvLoadImage(args[0]);
-        //create blank 1 channel image same size as the source 
-        IplImage src = cvCreateImage(cvGetSize(srcColor), IPL_DEPTH_8U, 1);
-        //convert source to grey and copy to src
-        cvCvtColor(srcColor, src, CV_BGR2GRAY);
-        //get the image to match loaded in greyscale. 
-        IplImage tmp = cvLoadImage(args[1], 0);
-        //this image will hold the strength of the match
-        //as the template is translated across the image 
-        IplImage result = cvCreateImage(
-                        cvSize(src.width() - tmp.width() + 1,
-                        src.height() - tmp.height() + 1), IPL_DEPTH_32F, src.nChannels());
-
-        cvZero(result);
-
-        // Match Template Function from OpenCV
-        cvMatchTemplate(src, tmp, result, CV_TM_CCORR_NORMED);
-
-        // double[] min_val = new double[2];
-        // double[] max_val = new double[2];
-        DoublePointer min_val = new DoublePointer();
-        DoublePointer max_val = new DoublePointer();
-
-        CvPoint minLoc = new CvPoint();
-        CvPoint maxLoc = new CvPoint();
-
-        cvMinMaxLoc(result, min_val, max_val, minLoc, maxLoc, null);
-
-        // Get the Max or Min Correlation Value
-        // System.out.println(Arrays.toString(min_val));
-        // System.out.println(Arrays.toString(max_val));
-
-        CvPoint point = new CvPoint();
-        point.x(maxLoc.x() + tmp.width());
-        point.y(maxLoc.y() + tmp.height());
-        // cvMinMaxLoc(src, min_val, max_val,0,0,result);
-
-        cvRectangle(srcColor, maxLoc, point, CvScalar.RED, 2, 8, 0); // Draw a
-                                                                // Rectangle for
-                                                                // Matched
-                                                                // Region
-
-        cvShowImage("Lena Image", srcColor);
-        cvWaitKey(0);
-        cvReleaseImage(srcColor);
-        cvReleaseImage(src);
-        cvReleaseImage(tmp);
-        cvReleaseImage(result);
-    }
 
     public static Rectangle cropToMatch(BufferedImage bi, String templatePath){
         //read in image default colors
