@@ -30,7 +30,7 @@ public class MainController extends Controller {
         imageView.setImage(SwingFXUtils.toFXImage(bi, null));
         sc.output(bi);
         App.paths[0] = "output.jpg";
-        new TemplateMatch().run(App.paths);
+        //new TemplateMatch().run(App.paths);
     }
 
     public ScreenCapture getsScreenCapture() {

@@ -3,8 +3,6 @@ package com.verellum.multicrew.arty;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,8 +28,8 @@ public class App extends Application
 
     public static void app(String[] args) throws URISyntaxException, FileNotFoundException, InterruptedException
     {
-        OpenCV.loadLocally();
-        Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
+        //OpenCV.loadLocally();
+        //Mat img1 = Imgcodecs.imread("src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png");
 
         String path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
         String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test4.png";

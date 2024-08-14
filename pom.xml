@@ -28,11 +28,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
             <version>4.9.0-0</version>
-        </dependency>
+        </dependency>-->
         <!--jfx-->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -48,6 +48,11 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>22.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.10</version>
         </dependency>
     </dependencies>
 
