@@ -39,14 +39,13 @@ public class App extends Application {
         String path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test4.png";
         String path3 = "src/main/resources/com/verellum/multicrew/arty/icons/circle_test2.png";
         String path4 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
-        // template goes second
-        paths[0] = path2;
+        //template goes second
         paths[1] = path1;
-
-        sc = new ScreenCapture();
-        launch();
-        // TemplateMatch.newStyle(paths);
-        // TemplateMatch.oldStyle(paths);
+        paths[0] = path2;
+        //sc = new ScreenCapture();
+        //launch();
+        TemplateMatch.newStyle(paths);
+        TemplateMatch.oldStyle(paths);
 
     }
 
