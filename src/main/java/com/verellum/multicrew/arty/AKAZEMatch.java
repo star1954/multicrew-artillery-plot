@@ -91,7 +91,7 @@ class AKAZEMatch {
             }
         }
  
-        double inlierThreshold = 2.5; // Distance threshold to identify inliers with homography check
+        double inlierThreshold = 5; // Distance threshold to identify inliers with homography check
         List<KeyPoint> listOfInliers1 = new ArrayList<>();
         List<KeyPoint> listOfInliers2 = new ArrayList<>();
         List<DMatch> listOfGoodMatches = new ArrayList<>();
