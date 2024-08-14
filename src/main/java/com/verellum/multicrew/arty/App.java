@@ -11,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import nu.pattern.OpenCV;
 
 import com.verellum.multicrew.arty.Controller;
 
