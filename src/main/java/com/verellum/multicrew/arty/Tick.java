@@ -15,6 +15,8 @@ public class Tick {
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private boolean isRunning = false;
 
+    public double pingScale = 10;
+
     public Tick(long tickTime){
         numThreads++;
         timeBetweenTicks = tickTime;
@@ -40,23 +42,34 @@ public class Tick {
         
 
         //Detect pings
-        Rectangle region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
+        Rectangle region1 = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
         //draw for debug
         Graphics2D g2d = Main.mapImage.createGraphics();
         g2d.setColor(Color.RED);
-        g2d.drawRect(region.x,region.y,region.width,region.height);
+        g2d.drawRect(region1.x,region1.y,region1.width,region1.height);
 
         //Detect pings
-        region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[1]);
+        Rectangle region2 = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[1]);
         //draw for debug
         g2d.setColor(Color.CYAN);
-        g2d.drawRect(region.x,region.y,region.width,region.height);
+        g2d.drawRect(region2.x,region2.y,region2.width,region2.height);
 
-        region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[2]);
+        Rectangle region3 = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[2]);
         //draw for debug
         g2d.setColor(Color.GREEN);
-        g2d.drawRect(region.x,region.y,region.width,region.height);
+        g2d.drawRect(region3.x,region3.y,region3.width,region3.height);
+
+        PingDetect.pushRects(region1, region2, region3);
+        PingDetect.calcCorrelations();
+
+        
+        for (double[] ping : PingDetect.filteredPings) {
+            //andro certifiedTM one-liner
+            g2d.drawOval((int)ping[0] - (int)(ping[2]*pingScale/2 + 3),(int)ping[1] - (int)(ping[2]*pingScale/2 + 3),(int)(ping[2]*pingScale + 3),(int)(ping[2]*pingScale + 3));
+        }
+        
         Main.getMainController().setImageView(Main.mapImage);
+        //g2d.dispose();
         
     }
 

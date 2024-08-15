@@ -36,6 +36,7 @@ public class Init extends Application {
             System.out.println("Unable to read template image");
             e.printStackTrace();
         }
+        PingDetect.initialize();
         launch();
     }
 
