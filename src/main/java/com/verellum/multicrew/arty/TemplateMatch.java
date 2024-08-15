@@ -21,6 +21,7 @@ public class TemplateMatch {
         //load template
         Mat templateColor = ScreenCapture.bufferedImageToMat(template);
         Mat templateGray = new Mat(templateColor.size(), CV_8UC1);
+        cvtColor(templateColor, templateGray, COLOR_BGR2GRAY);
         //Size for the result image
         Size size = new Size(sourceGrey.cols()-templateGray.cols()+1, sourceGrey.rows()-templateGray.rows()+1);
         Mat result = new Mat(size, CV_32FC1);
