@@ -1,13 +1,14 @@
 package com.verellum.multicrew.arty;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.awt.Rectangle;
 
 public class PingDetect {
-    private static List<Rectangle> smallPingList;
-    private static List<Rectangle> mediumPingList;
-    private static List<Rectangle> largePingList;
+    private static LinkedList<Rectangle> smallPingList;
+    private static LinkedList<Rectangle> mediumPingList;
+    private static LinkedList<Rectangle> largePingList;
 
     public static int listSize = 20;
     public static int maxErrSq = 9;
@@ -17,9 +18,9 @@ public class PingDetect {
             
 
     public static void initialize(){
-        smallPingList = new ArrayList<Rectangle>();
-        mediumPingList = new ArrayList<Rectangle>();
-        largePingList = new ArrayList<Rectangle>();
+        smallPingList = new LinkedList<Rectangle>();
+        mediumPingList = new LinkedList<Rectangle>();
+        largePingList = new LinkedList<Rectangle>();
         filteredPings = new ArrayList<double[]>();
     }
 
