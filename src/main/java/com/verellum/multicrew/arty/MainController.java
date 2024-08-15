@@ -27,7 +27,7 @@ public class MainController extends Controller {
     void screencap(ActionEvent event) {
         System.out.println("attempting capture!!!");
         BufferedImage bi = sc.capture();
-        imageView.setImage(SwingFXUtils.toFXImage(ScreenCapture.cropImage(bi, TemplateMatch.cropToMatch(bi, App.paths[1])), null));
+        imageView.setImage(SwingFXUtils.toFXImage(ScreenCapture.cropImage(bi, TemplateMatch.matchRect(bi, App.paths[1])), null));
     }
 
     public ScreenCapture getsScreenCapture() {
