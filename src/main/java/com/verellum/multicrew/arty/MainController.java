@@ -4,8 +4,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,8 +42,7 @@ public class MainController extends Controller {
     void findMap(ActionEvent event) throws IOException {
         System.out.println("attempting capture!!!");
         BufferedImage bi = sc.capture();
-        BufferedImage template = ImageIO.read(Main.class.getResource("maps/chernobyl.png"));
-        Rectangle region = TemplateMatch.matchRect(bi, template);
+        Rectangle region = TemplateMatch.matchRect(bi, Main.mapTemplate);
         Main.mapRegion = region;
         BufferedImage result = ScreenCapture.cropImage(bi, region);
         imageView.setImage(SwingFXUtils.toFXImage(result, null));

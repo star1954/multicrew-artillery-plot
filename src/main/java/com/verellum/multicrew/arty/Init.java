@@ -1,10 +1,13 @@
 package com.verellum.multicrew.arty;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import javax.imageio.ImageIO;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,33 +20,20 @@ import javafx.stage.Stage;
 public class Init extends Application {
 
     public static Path tempDir;
+    public static BufferedImage template;
 
     public static void initApp(){
         //extractResources();
+        
+        try {
+            Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/chernobyl.png"));
+            //We don't know why this works, but it stops a lagspike on detect minimap
+            ScreenCapture.bufferedImageToMat(Main.mapTemplate); 
+        } catch (IOException e) {
+            System.out.println("Unable to read template image");
+            e.printStackTrace();
+        }
         launch();
-    }
-    /**
-     * Attempts to create temporary directory
-     */
-    
-    private static void extractResources(){
-        try {
-			tempDir = Files.createTempDirectory("artyTemp");
-        } catch (IOException e) {
-            System.err.println("!! Failed to create temporary directory !!");
-            e.printStackTrace();
-        }
-        try {
-            Files.copy(Main.class.getResourceAsStream("maps/chernobyl.png"), tempDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static File getResource(String path){
-        String tempPath = System.getProperty("java.io.tmpdir");
-        File tempFile = new File(tempPath + File.separator + path);
-        return tempFile;
     }
 
     /**

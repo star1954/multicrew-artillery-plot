@@ -6,6 +6,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.bytedeco.opencv.opencv_core.Mat;
 
@@ -19,11 +22,13 @@ public class Main {
 
     static ScreenCapture sc;
     static Scene scene;
-    public static int runStatus;
+    public static byte runStatus;
+    public static BufferedImage mapTemplate;
     public static BufferedImage mapImage;
     public static Rectangle mapRegion;
-
-    private static final long timeBetweenTicks = 1000/15;
+    
+    private static final long timeBetweenTicks = 1000/1;
+    private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     private static void init(){
         runStatus = 0;
@@ -43,27 +48,17 @@ public class Main {
         
     }
 
-    public static Thread beginCapture(){
-        runStatus = 1;
+    public static void beginCapture(){
         //Return early in case the map has not been detected yet
         if (mapRegion == null){
-            return null;
+            return;
         }
-        Thread loopThread = new Thread(() -> captureLoop());
-        return loopThread;
-    }
 
-    private static void captureLoop(){
-        long lts = System.currentTimeMillis();
-        while (runStatus == 1){
-            if(lts + timeBetweenTicks >= System.currentTimeMillis()){
-                try {
-                    Thread.sleep((lts+timeBetweenTicks) - System.currentTimeMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            tick();
+        if(runStatus == 0){
+            runStatus = 1;
+            executor.scheduleWithFixedDelay(()-> {
+                tick();
+            },0,timeBetweenTicks,TimeUnit.MILLISECONDS);
         }
     }
 
@@ -71,7 +66,7 @@ public class Main {
      * The method to be called every update tick
      */
     private static void tick(){
-
+        //TODO: draw the rest of the owl
     }
 
     
