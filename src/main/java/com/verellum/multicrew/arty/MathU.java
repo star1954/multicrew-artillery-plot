@@ -16,6 +16,14 @@ public class MathU {
     private static final double g = 9.8 * 1.8;
     // private static final double P = 1.2;
 
+    public static double distanceSquared(double x, double y){
+        return Math.pow(x, 2) + Math.pow(y, 2);
+    }
+
+    public static double distance(double x, double y){
+        return Math.sqrt(distanceSquared(x, y));
+    }
+
     /**
      * @param studs
      * @return double Distance in meters

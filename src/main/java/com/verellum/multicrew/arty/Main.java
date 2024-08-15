@@ -14,7 +14,7 @@ public class Main {
     static Scene scene;
     public static BufferedImage mapTemplate;
     public static BufferedImage mapImage;
-    public static BufferedImage[] pingTemplate;
+    public static BufferedImage[] pingTemplate = {null, null, null};
     public static Rectangle mapRegion;
     public static Tick tick;
 
