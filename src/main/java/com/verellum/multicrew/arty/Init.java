@@ -1,8 +1,6 @@
 package com.verellum.multicrew.arty;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -40,9 +38,12 @@ public class Init extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        
-        
+    }
+
+    public static File getResource(String path){
+        String tempPath = System.getProperty("java.io.tmpdir");
+        File tempFile = new File(tempPath + File.separator + path);
+        return tempFile;
     }
 
     /**
