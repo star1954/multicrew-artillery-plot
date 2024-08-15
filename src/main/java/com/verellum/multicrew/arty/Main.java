@@ -36,7 +36,7 @@ public class Main {
         paths[1] = path1;
         paths[0] = path2;
         sc = new ScreenCapture();
-        Init.launch();
+        Init.initApp();
     }
 
 }
