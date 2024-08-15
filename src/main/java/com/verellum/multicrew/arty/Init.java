@@ -1,6 +1,10 @@
 package com.verellum.multicrew.arty;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -12,23 +16,33 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class Init extends Application{
+public class Init extends Application {
+
+    public static Path tempDir;
 
     public static void initApp(){
-        extractResources();
+        //extractResources();
+        launch();
     }
     /**
      * Attempts to create temporary directory
      */
+    
     private static void extractResources(){
         try {
-            // TODO remove this SuppressWarnings annotation once tempDir is used
-            @SuppressWarnings("unused")
-			Path tempDir = Files.createTempDirectory("artyTemp");
+			tempDir = Files.createTempDirectory("artyTemp");
         } catch (IOException e) {
             System.err.println("!! Failed to create temporary directory !!");
             e.printStackTrace();
         }
+        try {
+            Files.copy(Main.class.getResourceAsStream("maps/chernobyl.png"), tempDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        
+        
     }
 
     /**
@@ -71,4 +85,5 @@ public class Init extends Application{
         stage.setOnHidden(event -> Platform.exit());
         stage.show();
     }
+
 }

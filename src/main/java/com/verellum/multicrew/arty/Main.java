@@ -20,6 +20,8 @@ public class Main {
     public static String[] paths = { null, null };
     public static String path1, path2, path3, path4;
     public static Mat template = imread(path1,0);
+    
+    
 
     /**
      * @param args
@@ -36,7 +38,14 @@ public class Main {
         paths[1] = path1;
         paths[0] = path2;
         sc = new ScreenCapture();
-        Init.launch();
+        Init.initApp();
+    }
+
+    /**
+     * The method to be called every update tick
+     */
+    private static void tick(){
+
     }
 
 }

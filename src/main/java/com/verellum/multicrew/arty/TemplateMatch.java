@@ -13,24 +13,25 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 public class TemplateMatch {
 
-    public static Rectangle matchRect(BufferedImage bi, String templatePath){
+    public static Rectangle matchRect(BufferedImage bi, BufferedImage template){
         //read in image default colors
         Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
         cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
         //load template
-        Mat template = imread(templatePath, IMREAD_GRAYSCALE);
+        Mat templateColor = ScreenCapture.bufferedImageToMat(template);
+        Mat templateGray = new Mat(templateColor.size(), CV_8UC1);
         //Size for the result image
-        Size size = new Size(sourceGrey.cols()-template.cols()+1, sourceGrey.rows()-template.rows()+1);
+        Size size = new Size(sourceGrey.cols()-templateGray.cols()+1, sourceGrey.rows()-templateGray.rows()+1);
         Mat result = new Mat(size, CV_32FC1);
-        matchTemplate(sourceGrey, template, result, TM_CCORR_NORMED);
+        matchTemplate(sourceGrey, templateGray, result, TM_CCORR_NORMED);
         
         DoublePointer minVal= new DoublePointer();
         DoublePointer maxVal= new DoublePointer();
         Point min = new Point();
         Point max = new Point();
         minMaxLoc(result, minVal, maxVal, min, max, null);
-        rectangle(sourceColor,new Rect(max.x(),max.y(),template.cols(),template.rows()), MathU.randColor(), 2, 0, 0);
-        return new Rectangle(max.x(), max.y(), template.cols(), template.rows());
+        rectangle(sourceColor,new Rect(max.x(),max.y(),templateGray.cols(),templateGray.rows()), MathU.randColor(), 2, 0, 0);
+        return new Rectangle(max.x(), max.y(), templateGray.cols(), templateGray.rows());
     }
 }
