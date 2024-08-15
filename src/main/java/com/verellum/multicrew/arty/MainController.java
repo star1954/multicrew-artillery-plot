@@ -24,11 +24,6 @@ public class MainController extends Controller {
     @FXML
     private Button stopCaptureButton;
 
-    /**
-     * cropped portion of the screen with the minimap
-     */
-    private BufferedImage map;
-
     @FXML
     void initialize() {
         
@@ -43,8 +38,7 @@ public class MainController extends Controller {
     void findMap(ActionEvent event) {
         System.out.println("attempting capture!!!");
         BufferedImage bi = sc.capture();
-        map = ScreenCapture.cropImage(bi, TemplateMatch.matchRect(bi, App.paths[1]));
-        imageView.setImage(SwingFXUtils.toFXImage(map, null));
+        imageView.setImage(SwingFXUtils.toFXImage(ScreenCapture.cropImage(bi, TemplateMatch.matchRect(bi, Main.paths[1])), null));
     }
 
     /**
