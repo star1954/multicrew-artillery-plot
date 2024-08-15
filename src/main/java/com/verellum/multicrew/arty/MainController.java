@@ -56,7 +56,9 @@ public class MainController extends Controller {
     @FXML
     void startCapture(ActionEvent event) {
         // TODO begin main loop, have it look for pings and player on set FPS, maybe on
-        Main.beginCapture();
+        if (Tick.getNumThreads() < 1) {
+            Main.tick = new Tick(1000/15);
+        }
     }
 
     /**
@@ -66,7 +68,7 @@ public class MainController extends Controller {
      */
     @FXML
     void stopCapture(ActionEvent event) {
-        // TODO halt main loop
+        Main.tick.stop();
     }
 
     public ScreenCapture getsScreenCapture() {
@@ -75,6 +77,10 @@ public class MainController extends Controller {
 
     public void setScreenCapture(ScreenCapture sc) {
         this.sc = sc;
+    }
+
+    public void setImageView(BufferedImage bi) {
+        imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
 }

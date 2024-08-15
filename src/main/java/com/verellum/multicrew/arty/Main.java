@@ -22,54 +22,27 @@ public class Main {
 
     static ScreenCapture sc;
     static Scene scene;
-    public static byte runStatus;
     public static BufferedImage mapTemplate;
     public static BufferedImage mapImage;
     public static Rectangle mapRegion;
-    
-    private static final long timeBetweenTicks = 1000/1;
-    private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+    public static Tick tick;
 
-    private static void init(){
-        runStatus = 0;
-        Init.initApp();
-    }
+    private static MainController mc;
     
-
     /**
      * @param args
-     * @throws URISyntaxException
-     * @throws FileNotFoundException
-     * @throws InterruptedException
      */
     public static void main(String[] args) {
         sc = new ScreenCapture();
-        init(); //run the initialization steps
-        
+        Init.initApp();  
     }
 
-    public static void beginCapture(){
-        //Return early in case the map has not been detected yet
-        if (mapRegion == null){
-            return;
-        }
-
-        if(runStatus == 0){
-            runStatus = 1;
-            executor.scheduleWithFixedDelay(()-> {
-                tick();
-            },0,timeBetweenTicks,TimeUnit.MILLISECONDS);
-        }
+    public static void setMainController(MainController mc) {
+        Main.mc = mc;
     }
 
-    /**
-     * The method to be called every update tick
-     */
-    private static void tick(){
-        //TODO: draw the rest of the owl
+    public static MainController getMainController() {
+        return mc;
     }
-
-    
-    
 
 }

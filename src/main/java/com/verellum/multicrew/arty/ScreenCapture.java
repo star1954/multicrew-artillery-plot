@@ -38,6 +38,15 @@ public class ScreenCapture {
     }
 
     /**
+     * overload of capture()
+     * @param region rectangle of screen to be captured
+     * @return BufferedImage capture of the specific portion of screen
+     */
+    public BufferedImage capture(Rectangle region) {
+        return robot.createScreenCapture(region);
+    }
+
+    /**
      * @param bi The BufferedImage to write to storage
      * <p> Writes the image to the storage as output.jpg
      */

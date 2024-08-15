@@ -23,8 +23,6 @@ public class Init extends Application {
     public static BufferedImage template;
 
     public static void initApp(){
-        //extractResources();
-        
         try {
             Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/chernobyl.png"));
             //We don't know why this works, but it stops a lagspike on detect minimap
@@ -51,8 +49,10 @@ public class Init extends Application {
         ((Controller) fxmlLoader.getController()).setStage(stage);
 
         // Specific logic for the testing fxml
-        if (fxml.equals("test.fxml"))
-            ((MainController) fxmlLoader.getController()).setScreenCapture(Main.sc);
+        if (fxml.equals("test.fxml")) {
+            Main.setMainController(((MainController) fxmlLoader.getController()));
+            Main.getMainController().setScreenCapture(Main.sc);
+        }
         return par;
     }
 

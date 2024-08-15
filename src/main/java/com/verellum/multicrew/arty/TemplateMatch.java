@@ -25,7 +25,8 @@ public class TemplateMatch {
         // Size for the result image
         Size size = new Size(sourceGrey.cols() - templateGray.cols() + 1, sourceGrey.rows() - templateGray.rows() + 1);
         Mat result = new Mat(size, CV_32FC1);
-        matchTemplate(sourceGrey, templateGray, result, TM_CCORR_NORMED);
+        //was TM_CCORR_NORMED before
+        matchTemplate(sourceGrey, templateGray, result, TM_CCOEFF_NORMED);
         DoublePointer minVal = new DoublePointer();
         DoublePointer maxVal = new DoublePointer();
         Point min = new Point();
