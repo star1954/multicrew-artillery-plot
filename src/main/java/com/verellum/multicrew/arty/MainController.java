@@ -9,16 +9,27 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 public class MainController extends Controller {
 
     private ScreenCapture sc;
 
     @FXML
-    private Button screencapButton;
+    private Pane imgParent;
 
     @FXML
-    private ImageView imageView;
+    private GridPane gridPane;
+
+    @FXML
+    private Button screencapButton;
+
+    // @FXML
+    // private ImageView imageView;
 
     @FXML
     private Button startCaptureButton;
@@ -42,12 +53,12 @@ public class MainController extends Controller {
     void findMap(ActionEvent event) throws IOException {
         System.out.println("attempting capture!!!");
         BufferedImage bi = sc.capture();
-        Rectangle region = TemplateMatch.matchRect(bi, Main.mapTemplate);
+        Rectangle region = TemplateMatch.matchRect(bi, Main.mapTemplate, Main.mapTemplate);
         Main.mapRegion = region;
         BufferedImage result = ScreenCapture.cropImage(bi, region);
-        imageView.setImage(SwingFXUtils.toFXImage(result, null));
+        setImageView(result);
     }
-
+    
     /**
      * starts main loop
      * 
@@ -55,10 +66,8 @@ public class MainController extends Controller {
      */
     @FXML
     void startCapture(ActionEvent event) {
-        // TODO begin main loop, have it look for pings and player on set FPS, maybe on
-        if (Tick.getNumThreads() < 1) {
+        if (Tick.getNumThreads() < 1)
             Main.tick = new Tick(1000/15);
-        }
     }
 
     /**
@@ -68,7 +77,8 @@ public class MainController extends Controller {
      */
     @FXML
     void stopCapture(ActionEvent event) {
-        Main.tick.stop();
+        if (Tick.getNumThreads() == 1) 
+            Main.tick.stop();
     }
 
     public ScreenCapture getsScreenCapture() {
@@ -79,8 +89,16 @@ public class MainController extends Controller {
         this.sc = sc;
     }
 
+    //i had to kill the imageview, otherwise it causes refresh issues, FUCK KNOWS WHY
     public void setImageView(BufferedImage bi) {
-        imageView.setImage(SwingFXUtils.toFXImage(bi, null));
+        imgParent.setBackground(new Background(
+            new BackgroundImage(SwingFXUtils.toFXImage(bi, null), 
+            null, 
+            null, 
+            null, 
+            new BackgroundSize(420, 420, false, false, true, true))
+        ));
+        // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
 }

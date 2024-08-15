@@ -1,10 +1,7 @@
 package com.verellum.multicrew.arty;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
@@ -24,7 +21,8 @@ public class Init extends Application {
 
     public static void initApp(){
         try {
-            Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/chernobyl.png"));
+            //chernobyl.png
+            Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/newTemplate.png"));
             //We don't know why this works, but it stops a lagspike on detect minimap
             ScreenCapture.bufferedImageToMat(Main.mapTemplate); 
         } catch (IOException e) {
@@ -49,7 +47,7 @@ public class Init extends Application {
         ((Controller) fxmlLoader.getController()).setStage(stage);
 
         // Specific logic for the testing fxml
-        if (fxml.equals("test.fxml")) {
+        if (fxml.contains("test")) {
             Main.setMainController(((MainController) fxmlLoader.getController()));
             Main.getMainController().setScreenCapture(Main.sc);
         }
@@ -62,7 +60,7 @@ public class Init extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Main.scene = new Scene(loadFXML("test.fxml", stage), 640, 480);
+        Main.scene = new Scene(loadFXML("test3.fxml", stage), 640, 480);
         stage.setScene(Main.scene);
         stage.setTitle("🐾 Artillery Calculator Test Panel 🐾");
         stage.setResizable(false); // NO RESIZING !!! FUCK YOU

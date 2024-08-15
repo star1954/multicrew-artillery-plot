@@ -25,6 +25,14 @@
     -fx-font-size: 14px;
 }
 
+.grid {
+    -fx-background-color: transparent;
+}
+
+.grid Line {
+    -fx-stroke: white;
+}
+
 #right {
     -fx-background-color: 
         rgb(240, 240, 240),

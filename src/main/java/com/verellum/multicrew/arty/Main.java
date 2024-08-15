@@ -1,17 +1,7 @@
 package com.verellum.multicrew.arty;
 
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
-
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.bytedeco.opencv.opencv_core.Mat;
-
 import javafx.scene.Scene;
 
 /**
