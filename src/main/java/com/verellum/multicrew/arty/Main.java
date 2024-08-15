@@ -43,24 +43,25 @@ public class Main {
         
     }
 
-    public static void beginCapture(){
+    public static Thread beginCapture(){
         runStatus = 1;
         //Return early in case the map has not been detected yet
         if (mapRegion == null){
-            return;
+            return null;
         }
-        try {
-            captureLoop();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread loopThread = new Thread(() -> captureLoop());
+        return loopThread;
     }
 
-    private static void captureLoop() throws InterruptedException{
+    private static void captureLoop(){
         long lts = System.currentTimeMillis();
         while (runStatus == 1){
             if(lts + timeBetweenTicks >= System.currentTimeMillis()){
-                Thread.sleep((lts+timeBetweenTicks) - System.currentTimeMillis());
+                try {
+                    Thread.sleep((lts+timeBetweenTicks) - System.currentTimeMillis());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             tick();
         }
