@@ -17,11 +17,12 @@ public class Main {
 
     static ScreenCapture sc;
     static Scene scene;
-    //public static String[] paths = { null, null };
-    //public static String path1, path2, path3, path4;
-    //public static Mat template = imread(path1,0);
+    public static int runStatus;
 
-    
+    private static void init(){
+        runStatus = 0;
+        Init.initApp();
+    }
     
 
     /**
@@ -32,7 +33,16 @@ public class Main {
      */
     public static void main(String[] args) {
         sc = new ScreenCapture();
-        Init.initApp();
+        init();//run the initialization steps
+        
+    }
+
+    public static void beginCapture(){
+        runStatus = 1;
+    }
+
+    private static void captureLoop(){
+
     }
 
     /**
@@ -41,6 +51,8 @@ public class Main {
     private static void tick(){
 
     }
+
+    
     
 
 }
