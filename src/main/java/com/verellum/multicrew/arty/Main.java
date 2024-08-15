@@ -17,9 +17,10 @@ public class Main {
 
     static ScreenCapture sc;
     static Scene scene;
-    public static String[] paths = { null, null };
-    public static String path1, path2, path3, path4;
-    public static Mat template = imread(path1,0);
+    //public static String[] paths = { null, null };
+    //public static String path1, path2, path3, path4;
+    //public static Mat template = imread(path1,0);
+
     
     
 
@@ -30,13 +31,6 @@ public class Main {
      * @throws InterruptedException
      */
     public static void main(String[] args) {
-        path1 = "src/main/resources/com/verellum/multicrew/arty/maps/chernobyl.png";
-        path2 = "src/main/resources/com/verellum/multicrew/arty/maps/test4.png";
-        path3 = "src/main/resources/com/verellum/multicrew/arty/icons/circle_test2.png";
-        path4 = "src/main/resources/com/verellum/multicrew/arty/maps/default_homography.xml";
-        //template goes second
-        paths[1] = path1;
-        paths[0] = path2;
         sc = new ScreenCapture();
         Init.initApp();
     }
@@ -47,5 +41,6 @@ public class Main {
     private static void tick(){
 
     }
+    
 
 }
