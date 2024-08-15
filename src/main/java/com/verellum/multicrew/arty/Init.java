@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 public class Init {
 
-    public static void initialize(){
+    public static void init(){
         extractResources();
     }
     /**

@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 public class Main {
     
     public static void main(String[] args) throws FileNotFoundException, URISyntaxException, InterruptedException {
-        Init.initialize();
+        Init.init();
         App.app(args);
     }
 
