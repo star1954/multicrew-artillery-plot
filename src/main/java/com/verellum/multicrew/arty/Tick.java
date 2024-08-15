@@ -22,6 +22,7 @@ public class Tick {
         timeBetweenTicks = tickTime;
         //Return early in case the map has not been detected yet
         if (Main.mapRegion == null){
+            System.out.println("no map");
             return;
         }
 
