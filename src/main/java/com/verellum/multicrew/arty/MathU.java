@@ -99,7 +99,11 @@ public class MathU {
         return Math.pow(velocity, 2) * (2 * Math.sin(theta) * Math.cos(theta)) / g;
     }
 
-    // Generates a random color in RGB
+    
+    /** 
+     * @return Scalar
+     * Generates a random color in RGB
+     */
     public static Scalar randColor() {
         int b, g, r;
         b = ThreadLocalRandom.current().nextInt(0, 255 + 1);
