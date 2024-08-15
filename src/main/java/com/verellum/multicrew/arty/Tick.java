@@ -1,5 +1,8 @@
 package com.verellum.multicrew.arty;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +36,17 @@ public class Tick {
      */
     private void step(){
         //TODO: draw the rest of the owl
-        // Main.mapImage = Main.sc.capture(Main.mapRegion);
-        Main.getMainController().setImageView(Main.sc.capture(Main.mapRegion));
+        Main.mapImage = Main.sc.capture(Main.mapRegion);
+        
+
+        //Detect pings
+        Rectangle region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
+        //draw for debug
+        Graphics2D g2d = Main.mapImage.createGraphics();
+        g2d.setColor(Color.PINK);
+        g2d.drawRect(region.x,region.y,region.width,region.height);
+        Main.getMainController().setImageView(Main.mapImage);
+        
     }
 
     /**

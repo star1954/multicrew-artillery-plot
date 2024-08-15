@@ -23,6 +23,13 @@ public class Init extends Application {
         try {
             //chernobyl.png
             Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/newTemplate.png"));
+
+            //load pings
+            for (int index = 0; index <= 2; index++) {
+                Main.pingTemplate[index] = ImageIO.read(Main.class.getResource("icons/circle"+ index + ".png"));
+            }
+            
+
             //We don't know why this works, but it stops a lagspike on detect minimap
             ScreenCapture.bufferedImageToMat(Main.mapTemplate); 
         } catch (IOException e) {
