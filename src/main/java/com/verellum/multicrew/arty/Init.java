@@ -25,9 +25,9 @@ public class Init extends Application {
             Main.mapTemplate = ImageIO.read(Main.class.getResource("maps/newTemplate.png"));
 
             //load pings
-            for (int index = 0; index <= 2; index++) {
-                Main.pingTemplate[index] = ImageIO.read(Main.class.getResource("icons/circle"+ index + ".png"));
-            }
+            // for (int index = 0; index <= 2; index++) {
+                // Main.pingTemplate[index] = ImageIO.read(Main.class.getResource("icons/circle"+ index + ".png"));
+            // }
             
 
             //We don't know why this works, but it stops a lagspike on detect minimap
@@ -67,12 +67,12 @@ public class Init extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Main.scene = new Scene(loadFXML("test3.fxml", stage), 640, 480);
+        Main.scene = new Scene(loadFXML("test3.fxml", stage), 720, 540);
         stage.setScene(Main.scene);
         stage.setTitle("🐾 Artillery Calculator Test Panel 🐾");
         stage.setResizable(false); // NO RESIZING !!! FUCK YOU
-        stage.setMinWidth(640);
-        stage.setMinHeight(480);
+        stage.setMinWidth(720);
+        stage.setMinHeight(540);
         stage.setMaxWidth(Screen.getPrimary().getBounds().getMaxX());
         stage.setMaxHeight(Screen.getPrimary().getBounds().getMaxY());
         // boilerplate to close the app as soon as the main stage closes
@@ -80,6 +80,13 @@ public class Init extends Application {
         // catch
         stage.setOnHidden(event -> Platform.exit());
         stage.show();
+    }
+
+    @Override
+    public void stop() {
+        if (!(Main.tick == null)) {
+            Main.tick.stop();
+        }
     }
 
 }

@@ -25,7 +25,7 @@ public class Main {
      */
     public static void main(String[] args) {
         sc = new ScreenCapture();
-        Init.initApp();  
+        Init.initApp();
     }
 
     public static void setMainController(MainController mc) {

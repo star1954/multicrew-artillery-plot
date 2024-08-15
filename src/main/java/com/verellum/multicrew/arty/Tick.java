@@ -20,6 +20,7 @@ public class Tick {
         timeBetweenTicks = tickTime;
         //Return early in case the map has not been detected yet
         if (Main.mapRegion == null){
+            System.out.println("no map");
             return;
         }
 
@@ -39,12 +40,12 @@ public class Tick {
         Main.mapImage = Main.sc.capture(Main.mapRegion);
         
 
-        //Detect pings
-        Rectangle region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
-        //draw for debug
-        Graphics2D g2d = Main.mapImage.createGraphics();
-        g2d.setColor(Color.PINK);
-        g2d.drawRect(region.x,region.y,region.width,region.height);
+        // //Detect pings
+        // Rectangle region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
+        // //draw for debug
+        // Graphics2D g2d = Main.mapImage.createGraphics();
+        // g2d.setColor(Color.PINK);
+        // g2d.drawRect(region.x,region.y,region.width,region.height);
         Main.getMainController().setImageView(Main.mapImage);
         
     }
