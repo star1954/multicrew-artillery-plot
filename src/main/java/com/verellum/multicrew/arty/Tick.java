@@ -43,7 +43,18 @@ public class Tick {
         Rectangle region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[0]);
         //draw for debug
         Graphics2D g2d = Main.mapImage.createGraphics();
-        g2d.setColor(Color.PINK);
+        g2d.setColor(Color.RED);
+        g2d.drawRect(region.x,region.y,region.width,region.height);
+
+        //Detect pings
+        region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[1]);
+        //draw for debug
+        g2d.setColor(Color.CYAN);
+        g2d.drawRect(region.x,region.y,region.width,region.height);
+
+        region = TemplateMatch.matchRect(Main.mapImage, Main.pingTemplate[2]);
+        //draw for debug
+        g2d.setColor(Color.GREEN);
         g2d.drawRect(region.x,region.y,region.width,region.height);
         Main.getMainController().setImageView(Main.mapImage);
         

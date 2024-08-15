@@ -67,7 +67,7 @@ public class MainController extends Controller {
     @FXML
     void startCapture(ActionEvent event) {
         if (Tick.getNumThreads() < 1)
-            Main.tick = new Tick(1000/15);
+            Main.tick = new Tick(1000/30);
     }
 
     /**
