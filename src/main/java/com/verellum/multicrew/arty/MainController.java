@@ -52,7 +52,7 @@ public class MainController extends Controller {
      * @param event event of button being clicked, not important
      */
     @FXML
-    void startCaptureButton(ActionEvent event) {
+    void startCapture(ActionEvent event) {
         //TODO begin main loop, have it look for pings and player on set FPS, maybe on seperate thread?
     }
 
@@ -61,7 +61,7 @@ public class MainController extends Controller {
      * @param event event of button being clicked, not important
      */
     @FXML
-    void stopCaptureButton(ActionEvent event) {
+    void stopCapture(ActionEvent event) {
         //TODO halt main loop
     }
 
