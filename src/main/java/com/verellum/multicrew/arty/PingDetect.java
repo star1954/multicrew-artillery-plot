@@ -20,7 +20,7 @@ public class PingDetect {
         smallPingList = new ArrayList<Rectangle>();
         mediumPingList = new ArrayList<Rectangle>();
         largePingList = new ArrayList<Rectangle>();
-        filteredPings = new ArrayList<>();
+        filteredPings = new ArrayList<double[]>();
     }
 
     public static void pushRects(Rectangle smallPing, Rectangle mediumPing, Rectangle largePing){
