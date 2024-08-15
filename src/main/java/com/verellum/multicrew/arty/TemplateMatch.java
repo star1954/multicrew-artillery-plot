@@ -36,7 +36,7 @@ public class TemplateMatch {
         Point min = new Point();
         Point max = new Point();
         minMaxLoc(result, minVal, maxVal, min, max, null);
-        rectangle(sourceColor, new Rect(max.x(), max.y(), templateGray.cols(), templateGray.rows()), MathU.randColor(),
+        rectangle(sourceColor, new Rect(max.x(), max.y(), templateGray.cols(), templateGray.rows()), MathUtils.randColor(),
                 2, 0, 0);
         return new Rectangle(max.x(), max.y(), templateGray.cols(), templateGray.rows());
     }
@@ -72,7 +72,7 @@ public class TemplateMatch {
         Point min = new Point();
         Point max = new Point();
         minMaxLoc(result, minVal, maxVal, min, max, null);
-        rectangle(sourceColor, new Rect(max.x(), max.y(), templateGray.cols(), templateGray.rows()), MathU.randColor(),
+        rectangle(sourceColor, new Rect(max.x(), max.y(), templateGray.cols(), templateGray.rows()), MathUtils.randColor(),
                 2, 0, 0);
         return new Rectangle(max.x(), max.y(), templateGray.cols(), templateGray.rows());
     }

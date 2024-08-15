@@ -68,7 +68,7 @@ public class Init extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Main.scene = new Scene(loadFXML("test3.fxml", stage), 720, 540);
+        Main.scene = new Scene(loadFXML("test.fxml", stage), 720, 540);
         stage.setScene(Main.scene);
         stage.setTitle("🐾 Artillery Calculator Test Panel 🐾");
         stage.setResizable(false); // NO RESIZING !!! FUCK YOU

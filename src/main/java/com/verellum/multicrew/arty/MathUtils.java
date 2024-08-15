@@ -1,6 +1,8 @@
 package com.verellum.multicrew.arty;
 
 import org.bytedeco.opencv.opencv_core.Scalar;
+
+import java.awt.Point;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -10,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * generously <i>borrowed</i> from the people at mtc-artillery
  * (https://github.com/ari-party/mtc-artillery)
  */
-public class MathU {
+public class MathUtils {
 
     // constants generously taken mtc-artillery :))
     private static final double g = 9.8 * 1.8;
@@ -19,9 +21,17 @@ public class MathU {
     public static double distanceSquared(double x, double y){
         return Math.pow(x, 2) + Math.pow(y, 2);
     }
+    
+    public static double distanceSquared(Point p1, Point p2) {
+        return Point.distanceSq(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    }
 
     public static double distance(double x, double y){
         return Math.sqrt(distanceSquared(x, y));
+    }
+
+    public static double distance(Point p1, Point p2) {
+        return Point.distance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
     /**
@@ -105,6 +115,19 @@ public class MathU {
     public static double maxRange(double velocity, double maxElevation) {
         double theta = Math.min(45, Math.toRadians(maxElevation));
         return Math.pow(velocity, 2) * (2 * Math.sin(theta) * Math.cos(theta)) / g;
+    }
+
+    /**
+     * @param pxPoint point in map measured in pixels
+     * @param gridCount number of grid cells on the map
+     * @param px pixel width of the map (it better be square)
+     * @param gridSize width of 1 grid square in meters
+     * @return same point but converted to meters as the x and y
+     */
+    public static Point pxPointToMeters(Point pxPoint, int gridCount, double px, double gridSize) {
+        double mapSize = gridSize*gridCount;
+        double metersPerPixel = mapSize/px;
+        return new Point((int)(pxPoint.getX()*metersPerPixel), (int)(pxPoint.getY()*metersPerPixel));
     }
 
     

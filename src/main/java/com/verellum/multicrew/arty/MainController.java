@@ -8,11 +8,9 @@ import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Spinner;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -29,16 +27,27 @@ public class MainController extends Controller {
     private ScreenCapture sc;
     private Point player;
     private Point playerConv;
+    private Point playerMeters;
+
     private Point target;
     private Point targetConv;
+    private Point targetMeters;
+
     private Circle playerCircle;
     private Circle targetCircle;
+
+    private double mapScaleMeters;
+    private double mapScaleStuds;
+    private double shellVelocity;
 
     @FXML
     private GridPane gridPane;
 
     @FXML
     private Pane imgParent;
+
+    @FXML
+    private Spinner<?> meterSpinner;
 
     @FXML
     private VBox pingList;
@@ -56,14 +65,20 @@ public class MainController extends Controller {
     private Button stopCaptureButton;
 
     @FXML
+    private Spinner<?> studSpinner;
+
+    @FXML
     void initialize() {
-        
+        shellVelocity = 180;
+        mapScaleMeters = 162;
+
         target = new Point();
         targetConv = new Point();
         player = new Point();
         playerConv = new Point();
-        targetCircle = new Circle();
-        playerCircle = new Circle();
+        targetCircle = new Circle(0, Color.RED);
+        playerCircle = new Circle(0, Color.BLUE);
+
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
 
@@ -71,12 +86,12 @@ public class MainController extends Controller {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double x = event.getX();
                 double y = event.getY();
-                target.setLocation(x, y);
-                targetConv.setLocation(scaleConv(x), scaleConv(y));
-
-                targetCircle.relocate(x-5, y-5);
-                targetCircle.setRadius(5);
-                targetCircle.setFill(Color.RED);
+                setTarget(x, y);
+            }
+            if (event.getButton() == MouseButton.SECONDARY) {
+                double x = event.getX();
+                double y = event.getY();
+                setPlayer(x, y);
             }
         });
     }
@@ -122,12 +137,32 @@ public class MainController extends Controller {
 
     @FXML
     void clearPlayer(ActionEvent event) {
-
+        setPlayer(0, 0);
+        playerCircle.setRadius(0);
     }
 
     @FXML
     void clearTarget(ActionEvent event) {
+        setTarget(0, 0);
+        targetCircle.setRadius(0);
+    }
 
+    void setTarget(double x, double y) {
+        target.setLocation(x, y);
+        targetConv.setLocation(scaleConv(x), scaleConv(y));
+        targetMeters = MathUtils.pxPointToMeters(targetConv, 9, 330, mapScaleMeters);
+        targetCircle.relocate(x-5, y-5);
+        targetCircle.setRadius(5);
+        updateCalc();
+    }
+
+    void setPlayer(double x, double y) {
+        player.setLocation(x, y);
+        playerConv.setLocation(scaleConv(x), scaleConv(y));
+        playerMeters = MathUtils.pxPointToMeters(playerConv, 9, 330, mapScaleMeters);
+        playerCircle.relocate(x-5, y-5);
+        playerCircle.setRadius(5);
+        updateCalc();
     }
 
     public ScreenCapture getsScreenCapture() {
@@ -150,6 +185,10 @@ public class MainController extends Controller {
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
+    public void setTargetToPing(double[] ping) {
+        setTarget(ping[0]*1.3, ping[1]*1.3);
+    }
+
     /**
      * @param px pixel position on larger map in GUI
      * @return position on real map image (330x330)
@@ -158,6 +197,29 @@ public class MainController extends Controller {
         return (int)((px - 13) / 1.3);
     }
 
+    public void appendList(double[] ping) {
 
+    }
+
+    public void updateCalc() {
+        if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0)
+            return;
+        double distance = MathUtils.distance(playerMeters, targetMeters);
+        double directAngle = MathUtils.directAngle(distance, shellVelocity);
+        double indirectAngle = MathUtils.indirectAngle(distance, shellVelocity);
+        double directFlightTime = MathUtils.flightTime(directAngle, shellVelocity, distance);
+        double indirectFlightTime = MathUtils.flightTime(indirectAngle, shellVelocity, distance);
+        double maxRange = MathUtils.maxRange(shellVelocity);
+        System.out.println("distance to target: " + distance + "m");
+        System.out.println("direct angle " + directAngle + " degrees");
+        System.out.println("indirect angle " + indirectAngle + " degrees");
+        System.out.println("direct flight time " + directFlightTime + " seconds");
+        System.out.println("indirect flight time " + indirectFlightTime + " seconds");
+        System.out.println("max range " + maxRange + "m");
+    }
+
+    public void clearCalc() {
+
+    }
 
 }

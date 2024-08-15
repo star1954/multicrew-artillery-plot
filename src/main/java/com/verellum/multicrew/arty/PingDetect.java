@@ -15,7 +15,6 @@ public class PingDetect {
     public static int maxMergeSq = 9;
 
     public static List<double[]> filteredPings;
-            
 
     public static void initialize(){
         smallPingList = new LinkedList<Rectangle>();
@@ -36,7 +35,7 @@ public class PingDetect {
     }
 
     public static void calcCorrelations(){
-        System.out.println(filteredPings.size());
+        // System.out.println(filteredPings.size());
         Rectangle smallPing = null;
         Rectangle mediumPing = mediumPingList.get(0);
         Rectangle largePing = null;
@@ -45,7 +44,7 @@ public class PingDetect {
         double avgDist = 0;
 
         for (Rectangle ping : smallPingList) {
-            sPingDistSq = MathU.distanceSquared(ping.getCenterX()-mediumPing.getCenterX(), ping.getCenterY()-mediumPing.getCenterY());
+            sPingDistSq = MathUtils.distanceSquared(ping.getCenterX()-mediumPing.getCenterX(), ping.getCenterY()-mediumPing.getCenterY());
             if (sPingDistSq <= maxErrSq){
                 smallPing = ping;
                 break;
@@ -53,7 +52,7 @@ public class PingDetect {
         }
 
         for (Rectangle ping : largePingList) {
-            lPingDistSq = MathU.distanceSquared(ping.getCenterX()-mediumPing.getCenterX(), ping.getCenterY()-mediumPing.getCenterY());
+            lPingDistSq = MathUtils.distanceSquared(ping.getCenterX()-mediumPing.getCenterX(), ping.getCenterY()-mediumPing.getCenterY());
             if (lPingDistSq <= maxErrSq){
                 largePing = ping;
                 break;
@@ -80,7 +79,7 @@ public class PingDetect {
         double[] output = {mediumPing.getCenterX(), mediumPing.getCenterY(), avgDist};
 
         for (double[] ds : filteredPings) {
-            if(MathU.distanceSquared(ds[0]-output[0], ds[1]-output[1]) < maxMergeSq){
+            if(MathUtils.distanceSquared(ds[0]-output[0], ds[1]-output[1]) < maxMergeSq){
                 if(ds[2] >= output[2]){
                     ds[0]=output[0];
                     ds[1]=output[1];

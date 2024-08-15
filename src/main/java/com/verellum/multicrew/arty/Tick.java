@@ -65,12 +65,13 @@ public class Tick {
 
         
         for (double[] ping : PingDetect.filteredPings) {
+            Main.getMainController().appendList(ping);
             //andro certifiedTM one-liner
             g2d.drawOval((int)ping[0] - (int)(ping[2]*pingScale/2 + 3),(int)ping[1] - (int)(ping[2]*pingScale/2 + 3),(int)(ping[2]*pingScale + 3),(int)(ping[2]*pingScale + 3));
         }
         
         Main.getMainController().setImageView(Main.mapImage);
-        //g2d.dispose();
+        g2d.dispose();
         
     }
 
