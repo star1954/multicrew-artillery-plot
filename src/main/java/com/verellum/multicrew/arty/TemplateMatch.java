@@ -13,7 +13,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 public class TemplateMatch {
 
-    public static Rectangle cropToMatch(BufferedImage bi, String templatePath){
+    public static Rectangle matchRect(BufferedImage bi, String templatePath){
         //read in image default colors
         Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
