@@ -2,6 +2,8 @@ package com.verellum.multicrew.arty;
 
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
@@ -18,6 +20,10 @@ public class Main {
     static ScreenCapture sc;
     static Scene scene;
     public static int runStatus;
+    public static BufferedImage mapImage;
+    public static Rectangle mapRegion;
+
+    private static final long timeBetweenTicks = 1000/15;
 
     private static void init(){
         runStatus = 0;
@@ -33,16 +39,31 @@ public class Main {
      */
     public static void main(String[] args) {
         sc = new ScreenCapture();
-        init();//run the initialization steps
+        init(); //run the initialization steps
         
     }
 
     public static void beginCapture(){
         runStatus = 1;
+        //Return early in case the map has not been detected yet
+        if (mapRegion == null){
+            return;
+        }
+        try {
+            captureLoop();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void captureLoop(){
-
+    private static void captureLoop() throws InterruptedException{
+        long lts = System.currentTimeMillis();
+        while (runStatus == 1){
+            if(lts + timeBetweenTicks >= System.currentTimeMillis()){
+                Thread.sleep((lts+timeBetweenTicks) - System.currentTimeMillis());
+            }
+            tick();
+        }
     }
 
     /**

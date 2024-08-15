@@ -1,5 +1,6 @@
 package com.verellum.multicrew.arty;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -44,7 +45,9 @@ public class MainController extends Controller {
         System.out.println("attempting capture!!!");
         BufferedImage bi = sc.capture();
         BufferedImage template = ImageIO.read(Main.class.getResource("maps/chernobyl.png"));
-        BufferedImage result = ScreenCapture.cropImage(bi, TemplateMatch.matchRect(bi, template));
+        Rectangle region = TemplateMatch.matchRect(bi, template);
+        Main.mapRegion = region;
+        BufferedImage result = ScreenCapture.cropImage(bi, region);
         imageView.setImage(SwingFXUtils.toFXImage(result, null));
     }
 
@@ -56,7 +59,7 @@ public class MainController extends Controller {
     @FXML
     void startCapture(ActionEvent event) {
         // TODO begin main loop, have it look for pings and player on set FPS, maybe on
-        // seperate thread?
+        Main.beginCapture();
     }
 
     /**
