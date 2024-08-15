@@ -12,10 +12,11 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class Init extends Application{
+public class Init extends Application {
 
     public static void initApp(){
         extractResources();
+        launch();
     }
     /**
      * Attempts to create temporary directory
@@ -71,4 +72,5 @@ public class Init extends Application{
         stage.setOnHidden(event -> Platform.exit());
         stage.show();
     }
+
 }
