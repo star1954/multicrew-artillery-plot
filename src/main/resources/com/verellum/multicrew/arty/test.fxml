@@ -51,17 +51,31 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="screencapButton" mnemonicParsing="false" onAction="#screencap" text="SCREENCAP TEST" />
+                  <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="149.0">
+                     <children>
+                        <Button fx:id="screencapButton" alignment="CENTER" mnemonicParsing="false" onAction="#findMap" text="Detect Map">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="startCaptureButton" alignment="CENTER" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#startCapture" text="Begin view capture">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="stopCaptureButton" alignment="CENTER" layoutX="26.0" layoutY="35.0" mnemonicParsing="false" onAction="#stopCapture" text="Stop view capture">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button mnemonicParsing="false" text="confetti" />
-               </children>
-            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" />
          </children>
       </VBox>
    </right>

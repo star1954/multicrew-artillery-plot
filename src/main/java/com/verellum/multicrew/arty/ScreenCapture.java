@@ -7,11 +7,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
-
 import javax.imageio.ImageIO;
 
-import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.Java2DFrameUtils;
 import org.bytedeco.opencv.opencv_core.Mat;
 
@@ -30,6 +27,7 @@ public class ScreenCapture {
         }
     }
 
+    //TODO overload of capture() to be able to get a specific portion of the screen (to make finding stuff on the map faster)
     /**
      * @return BufferedImage The screen captured
      * <p> (This captures the main monitor)
