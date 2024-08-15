@@ -1,5 +1,6 @@
 package com.verellum.multicrew.arty;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +31,12 @@ public class Init extends Application {
             System.err.println("!! Failed to create temporary directory !!");
             e.printStackTrace();
         }
+    }
+
+    public static File getResource(String path){
+        String tempPath = System.getProperty("java.io.tmpdir");
+        File tempFile = new File(tempPath + File.separator + path);
+        return tempFile;
     }
 
     /**
