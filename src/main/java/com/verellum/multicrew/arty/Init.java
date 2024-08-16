@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class Init extends Application {
 
-    public static boolean debug = true;
+    public static boolean debug = false;
     public static final long TICKRATE = 1000/30;
 
     public static void initApp(){
@@ -64,18 +64,19 @@ public class Init extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Main.scene = new Scene(loadFXML("test.fxml", stage), 720, 540);
+        Main.scene = new Scene(loadFXML("test.fxml", stage), 720, 580);
         stage.setScene(Main.scene);
         stage.setTitle("🐾 Artillery Calculator Test Panel 🐾");
         stage.setResizable(false); // NO RESIZING !!! FUCK YOU
         stage.setMinWidth(720);
-        stage.setMinHeight(540);
+        stage.setMinHeight(580);
         stage.setMaxWidth(Screen.getPrimary().getBounds().getMaxX());
         stage.setMaxHeight(Screen.getPrimary().getBounds().getMaxY());
         // boilerplate to close the app as soon as the main stage closes
         // because if we have popups theres a chance theres a background process we wont
         // catch
         stage.setOnHidden(event -> Platform.exit());
+        Main.getMainController().setInit(this);
         stage.show();
     }
 

@@ -10,6 +10,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -25,6 +26,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class MainController extends Controller {
+
+    private Init init;
 
     private ScreenCapture sc;
     private Point player;
@@ -49,6 +52,9 @@ public class MainController extends Controller {
 
     @FXML
     private Pane imgParent;
+
+    @FXML
+    private CheckMenuItem menuSettingsDebug;
 
     @FXML
     private TextField metersBox;
@@ -160,6 +166,17 @@ public class MainController extends Controller {
     }
 
     @FXML
+    void clearBoth(ActionEvent event) {
+        clearPlayer();
+        clearTarget();
+    }
+
+    @FXML
+    void close(ActionEvent event) {
+        init.stop();
+    }
+
+    @FXML
     void convert(ActionEvent event) {
         if (studsBox.getText().isEmpty()) 
             return;
@@ -181,6 +198,21 @@ public class MainController extends Controller {
         Main.mapRegion = region;
         BufferedImage result = ScreenCapture.cropImage(bi, region);
         setImageView(result);
+    }
+
+    @FXML
+    void openAbout(ActionEvent event) {
+
+    }
+
+    @FXML
+    void openHelp(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setDebug(ActionEvent event) {
+        Init.debug = menuSettingsDebug.isSelected();
     }
     
     /**
@@ -205,14 +237,12 @@ public class MainController extends Controller {
             Main.tick.stop();
     }
 
-    @FXML
-    void clearPlayer(ActionEvent event) {
+    void clearPlayer() {
         setPlayer(0, 0);
         playerCircle.setRadius(0);
     }
 
-    @FXML
-    void clearTarget(ActionEvent event) {
+    void clearTarget() {
         setTarget(0, 0);
         targetCircle.setRadius(0);
     }
@@ -231,8 +261,8 @@ public class MainController extends Controller {
         updateCalc();
     }
 
-    public ScreenCapture getsScreenCapture() {
-        return sc;
+    public void setInit(Init init) {
+        this.init = init;
     }
 
     public void setScreenCapture(ScreenCapture sc) {
