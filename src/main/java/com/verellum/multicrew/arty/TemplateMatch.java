@@ -4,10 +4,12 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import org.bytedeco.javacpp.*;
-
+import org.bytedeco.javacv.Java2DFrameUtils;
 import org.bytedeco.opencv.opencv_core.*;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 public class TemplateMatch {
 
@@ -18,7 +20,6 @@ public class TemplateMatch {
      */
     public static Rectangle matchRect(BufferedImage bi, BufferedImage template) {
         // read in image default colors
-
         Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
         Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
         cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
@@ -67,6 +68,38 @@ public class TemplateMatch {
         Mat result = new Mat(size, CV_32FC1);
         //was TM_CCORR_NORMED before
         matchTemplate(sourceGrey, templateGray, result, TM_CCOEFF_NORMED, maskGrey);
+        DoublePointer minVal = new DoublePointer();
+        DoublePointer maxVal = new DoublePointer();
+        Point min = new Point();
+        Point max = new Point();
+        minMaxLoc(result, minVal, maxVal, min, max, null);
+        rectangle(sourceColor, new Rect(max.x(), max.y(), templateGray.cols(), templateGray.rows()), MathUtils.randColor(),
+                2, 0, 0);
+        return new Rectangle(max.x(), max.y(), templateGray.cols(), templateGray.rows());
+    }
+
+    /**
+     * copy of matchRect that filters out the green colour channel 
+     * in order to decrease the likelihood
+     * of the software detecting grass as pings
+     */
+    public static Rectangle matchRectRB(BufferedImage bi, BufferedImage template) {
+        MatVector channels = new MatVector(3);
+        Mat sourceColor = ScreenCapture.bufferedImageToMat(bi);
+        split(sourceColor, channels);
+        channels.get(1).zero();
+        merge(channels, sourceColor);
+        imshow("gffdg", sourceColor);
+        Mat sourceGrey = new Mat(sourceColor.size(), CV_8UC1);
+        cvtColor(sourceColor, sourceGrey, COLOR_BGR2GRAY);
+        Mat templateColor = ScreenCapture.bufferedImageToMat(template);
+        Mat templateGray = new Mat(templateColor.size(), CV_8UC1);
+        cvtColor(templateColor, templateGray, COLOR_BGR2GRAY);
+        // Size for the result image
+        Size size = new Size(sourceGrey.cols() - templateGray.cols() + 1, sourceGrey.rows() - templateGray.rows() + 1);
+        Mat result = new Mat(size, CV_32FC1);
+        //was TM_CCORR_NORMED before
+        matchTemplate(sourceGrey, templateGray, result, TM_CCOEFF_NORMED);
         DoublePointer minVal = new DoublePointer();
         DoublePointer maxVal = new DoublePointer();
         Point min = new Point();

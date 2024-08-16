@@ -1,5 +1,6 @@
 target/*
 temp/*
+output.png
 # Compiled class file
 *.class
 

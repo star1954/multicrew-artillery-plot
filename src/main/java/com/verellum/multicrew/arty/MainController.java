@@ -70,7 +70,7 @@ public class MainController extends Controller {
     @FXML
     void initialize() {
         shellVelocity = 180;
-        mapScaleMeters = 162;
+        mapScaleMeters = 239;
 
         target = new Point();
         targetConv = new Point();
