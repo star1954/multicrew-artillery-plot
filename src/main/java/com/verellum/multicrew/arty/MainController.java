@@ -4,16 +4,20 @@ import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
-import java.util.Map;
 
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -24,26 +28,27 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.converter.DoubleStringConverter;
 
 public class MainController extends Controller {
 
     private ScreenCapture sc;
     private Point player;
-    private Point playerConv;
     private Point playerMeters;
 
     private Point target;
-    private Point targetConv;
     private Point targetMeters;
 
     private Circle playerCircle;
     private Circle targetCircle;
 
     private double mapScaleMeters;
-    private double mapScaleStuds;
     private double shellVelocity;
 
     private LinkedList<PingController> pings;
+
+    @FXML
+    private Button conversionButton;
 
     @FXML
     private GridPane gridPane;
@@ -52,7 +57,7 @@ public class MainController extends Controller {
     private Pane imgParent;
 
     @FXML
-    private Spinner<?> meterSpinner;
+    private TextField metersBox;
 
     @FXML
     private VBox pingList;
@@ -70,19 +75,20 @@ public class MainController extends Controller {
     private Button stopCaptureButton;
 
     @FXML
-    private Spinner<?> studSpinner;
+    private TextField studsBox;
+
+    @FXML
+    private TextField velocityBox;
 
     @FXML
     void initialize() {
-        shellVelocity = 180;
-        mapScaleMeters = 239;
-
         target = new Point();
-        targetConv = new Point();
         player = new Point();
-        playerConv = new Point();
         targetCircle = new Circle(0, Color.RED);
         playerCircle = new Circle(0, Color.BLUE);
+
+        targetCircle.setMouseTransparent(true);
+        playerCircle.setMouseTransparent(true);
 
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
@@ -99,6 +105,50 @@ public class MainController extends Controller {
                 setPlayer(x, y);
             }
         });
+
+        studsBox.setTextFormatter(new TextFormatter<>(new DoubleStringConverter()));
+        velocityBox.setTextFormatter(new TextFormatter<>(new DoubleStringConverter()));
+
+        metersBox.setTextFormatter(new TextFormatter<Double>(change -> {
+            if (change.isDeleted())
+                return change;
+            String str = change.getControlNewText();
+            if (str.matches("0\\d+"))
+                return null;
+            try {
+                double n = Double.parseDouble(str);
+                return 0 <= n && n <= 9999 ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        metersBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (metersBox.getText().isEmpty())
+                return;
+            mapScaleMeters = Double.parseDouble(newValue);
+            updateCalc();
+            metersBox.setText(new DecimalFormat("####.##").format(Double.parseDouble(newValue)));
+        });
+
+        velocityBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                shellVelocity = Double.parseDouble(newValue);
+                updateCalc();
+                velocityBox.setText(new DecimalFormat("####.##").format(Double.parseDouble(newValue)));
+            } catch (NumberFormatException e) {
+                Platform.runLater(() -> {
+                    velocityBox.setText(oldValue);
+                });
+            }
+        });
+    }
+
+    @FXML
+    void convert(ActionEvent event) {
+        if (studsBox.getText().isEmpty()) 
+            return;
+        metersBox.setText(Double.toString(MathUtils.studsToMeters(Double.parseDouble(studsBox.getText()))));
     }
 
     /**
@@ -154,8 +204,6 @@ public class MainController extends Controller {
 
     void setTarget(double x, double y) {
         target.setLocation(x, y);
-        targetConv.setLocation(scaleConv(x), scaleConv(y));
-        targetMeters = MathUtils.pxPointToMeters(targetConv, 9, 330, mapScaleMeters);
         targetCircle.relocate(x-5, y-5);
         targetCircle.setRadius(5);
         updateCalc();
@@ -163,8 +211,6 @@ public class MainController extends Controller {
 
     void setPlayer(double x, double y) {
         player.setLocation(x, y);
-        playerConv.setLocation(scaleConv(x), scaleConv(y));
-        playerMeters = MathUtils.pxPointToMeters(playerConv, 9, 330, mapScaleMeters);
         playerCircle.relocate(x-5, y-5);
         playerCircle.setRadius(5);
         updateCalc();
@@ -207,17 +253,20 @@ public class MainController extends Controller {
     }
 
     //TODO update labels with calculations
-    public void updateCalc() {
+    private void updateCalc() {
         if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0)
             return;
         
+        targetMeters = MathUtils.pxPointToMeters(new Point(scaleConv(target.getX()), scaleConv(target.getY())), 9, 330, mapScaleMeters);
+        playerMeters = MathUtils.pxPointToMeters(new Point(scaleConv(player.getX()), scaleConv(player.getY())), 9, 330, mapScaleMeters);
+
         double distance = MathUtils.distance(playerMeters, targetMeters);
         double directAngle = MathUtils.directAngle(distance, shellVelocity);
         double indirectAngle = MathUtils.indirectAngle(distance, shellVelocity);
         double directFlightTime = MathUtils.flightTime(directAngle, shellVelocity, distance);
         double indirectFlightTime = MathUtils.flightTime(indirectAngle, shellVelocity, distance);
         double maxRange = MathUtils.maxRange(shellVelocity);
-
+        System.out.println("---------------------------------");
         System.out.println("distance to target: " + distance + "m");
         System.out.println("direct angle " + directAngle + " degrees");
         System.out.println("indirect angle " + indirectAngle + " degrees");
