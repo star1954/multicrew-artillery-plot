@@ -35,6 +35,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -50,9 +53,9 @@
    <right>
       <VBox id="right" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="375.0" prefWidth="180.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" layoutX="11.0" layoutY="28.0" prefHeight="34.0" prefWidth="162.0">
+            <HBox alignment="CENTER" layoutX="11.0" layoutY="28.0" prefHeight="21.0" prefWidth="178.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="super special control panel" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="25.0" prefHeight="25.0" prefWidth="142.0" text="super special control panel" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -123,7 +126,7 @@
                      </children>
                   </HBox>
                   <Label alignment="CENTER" layoutX="10.0" layoutY="28.0" prefWidth="180.0" text="projectile velocity (m/s)" />
-                  <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="50.0" prefHeight="40.0" prefWidth="178.0">
+                  <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="50.0" prefHeight="34.0" prefWidth="178.0">
                      <children>
                         <TextField fx:id="velocityBox" promptText="meters / second">
                            <HBox.margin>
@@ -188,4 +191,25 @@
          </BorderPane.margin>
       </Pane>
    </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="App">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Settings">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Debug" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>

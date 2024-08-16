@@ -1,9 +1,6 @@
 package com.verellum.multicrew.arty;
 
-import org.bytedeco.opencv.opencv_core.Scalar;
-
 import java.awt.Point;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>

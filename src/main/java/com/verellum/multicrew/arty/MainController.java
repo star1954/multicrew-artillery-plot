@@ -4,18 +4,13 @@ import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.LinkedList;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseButton;
@@ -28,7 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.util.converter.DoubleStringConverter;
 
 public class MainController extends Controller {
 
@@ -45,7 +39,7 @@ public class MainController extends Controller {
     private double mapScaleMeters;
     private double shellVelocity;
 
-    private LinkedList<PingController> pings;
+    private LinkedList<PingController> pingCards;
 
     @FXML
     private Button conversionButton;
@@ -106,17 +100,42 @@ public class MainController extends Controller {
             }
         });
 
-        studsBox.setTextFormatter(new TextFormatter<>(new DoubleStringConverter()));
-        velocityBox.setTextFormatter(new TextFormatter<>(new DoubleStringConverter()));
-
-        metersBox.setTextFormatter(new TextFormatter<Double>(change -> {
+        studsBox.setTextFormatter(new TextFormatter<Integer>(change -> {
             if (change.isDeleted())
                 return change;
             String str = change.getControlNewText();
             if (str.matches("0\\d+"))
                 return null;
             try {
-                double n = Double.parseDouble(str);
+                double n = Integer.parseInt(str);
+                return 0 <= n && n <= 9999 ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        velocityBox.setTextFormatter(new TextFormatter<Integer>(change -> {
+            if (change.isDeleted())
+                return change;
+            String str = change.getControlNewText();
+            if (str.matches("0\\d+"))
+                return null;
+            try {
+                double n = Integer.parseInt(str);
+                return 0 <= n && n <= 9999 ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        metersBox.setTextFormatter(new TextFormatter<Integer>(change -> {
+            if (change.isDeleted())
+                return change;
+            String str = change.getControlNewText();
+            if (str.matches("0\\d+"))
+                return null;
+            try {
+                double n = Integer.parseInt(str);
                 return 0 <= n && n <= 9999 ? change : null;
             } catch (NumberFormatException e) {
                 return null;
@@ -128,19 +147,15 @@ public class MainController extends Controller {
                 return;
             mapScaleMeters = Double.parseDouble(newValue);
             updateCalc();
-            metersBox.setText(new DecimalFormat("####.##").format(Double.parseDouble(newValue)));
+            metersBox.setText(newValue);
         });
 
         velocityBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                shellVelocity = Double.parseDouble(newValue);
-                updateCalc();
-                velocityBox.setText(new DecimalFormat("####.##").format(Double.parseDouble(newValue)));
-            } catch (NumberFormatException e) {
-                Platform.runLater(() -> {
-                    velocityBox.setText(oldValue);
-                });
-            }
+            if (velocityBox.getText().isEmpty())
+                return;
+            shellVelocity = Double.parseDouble(newValue);
+            updateCalc();
+            velocityBox.setText(newValue);
         });
     }
 
@@ -148,7 +163,7 @@ public class MainController extends Controller {
     void convert(ActionEvent event) {
         if (studsBox.getText().isEmpty()) 
             return;
-        metersBox.setText(Double.toString(MathUtils.studsToMeters(Double.parseDouble(studsBox.getText()))));
+        metersBox.setText(Integer.toString((int)MathUtils.studsToMeters(Integer.parseInt(studsBox.getText()))));
     }
 
     /**
@@ -241,14 +256,21 @@ public class MainController extends Controller {
     }
 
     /**
-     * @param px pixel position on larger map in GUI
+     * @param px pixel position on larger map in GUI (442x442)
      * @return position on real map image (330x330)
      */
     public static int scaleConv(double px) {
         return (int)((px - 13) / 1.3);
     }
 
+    //TODO use callbacks for both of these
+    //TODO have appendList load cards and add to vbox with ping info
     public void appendList(double[] ping) {
+
+    }
+
+    //TODO have updatePing (called when refining a pings confidence) update the ping object in our list
+    public void updatePing(int id, double[] ping) {
 
     }
 
@@ -275,6 +297,7 @@ public class MainController extends Controller {
         System.out.println("max range " + maxRange + "m");
     }
 
+    //TODO consider if having a button for this makes sense even
     public void clearCalc() {
 
     }

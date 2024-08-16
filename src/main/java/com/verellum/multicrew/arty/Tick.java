@@ -39,7 +39,6 @@ public class Tick {
      * The method to be called every update tick
      */
     private void step(){
-        long b = System.currentTimeMillis();
         //TODO: draw the rest of the owl
         Main.mapImage = Main.sc.capture(Main.mapRegion);
         

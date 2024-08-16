@@ -12,8 +12,6 @@ import javax.imageio.ImageIO;
 import org.bytedeco.javacv.Java2DFrameUtils;
 import org.bytedeco.opencv.opencv_core.Mat;
 
-import javafx.scene.paint.Color;
-
 /**
  * Utility class to take screenshots
  */
@@ -104,7 +102,7 @@ public class ScreenCapture {
                 int rgb = bi.getRGB(w,h);
                 //bitshift magic idk
                 int r = rgb >> 16 & 0xff;
-                int g = rgb >> 8 & 0xff;
+                // int g = rgb >> 8 & 0xff;
                 int b = rgb & 0xff;
                 result.setRGB(w, h, (r << 16 | b));
             }

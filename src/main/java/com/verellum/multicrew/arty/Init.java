@@ -1,9 +1,6 @@
 package com.verellum.multicrew.arty;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.file.Path;
-
 import javax.imageio.ImageIO;
 
 import javafx.application.Application;
