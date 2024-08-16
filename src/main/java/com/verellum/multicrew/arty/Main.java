@@ -40,4 +40,8 @@ public class Main {
         return mc;
     }
 
+    public interface Callback {
+        void call();
+    }
+
 }

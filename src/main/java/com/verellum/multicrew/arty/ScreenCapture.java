@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 import org.bytedeco.javacv.Java2DFrameUtils;
 import org.bytedeco.opencv.opencv_core.Mat;
 
+import javafx.scene.paint.Color;
+
 /**
  * Utility class to take screenshots
  */
@@ -89,6 +91,25 @@ public class ScreenCapture {
      */
     public static BufferedImage cropImage(BufferedImage bi, Rectangle rect) {
         return bi.getSubimage(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    /**
+     * @param bi input image to be STRIPPED OF ITS DASTARDLY GREEN
+     * @return purified green-free image
+     */
+    public static BufferedImage removeGreenChannel(BufferedImage bi) {
+        BufferedImage result = new BufferedImage(bi.getWidth(), bi.getHeight(), bi.getType());
+        for (int w = 0; w < bi.getWidth(); w++) {
+            for (int h = 0; h < bi.getHeight(); h++ ) {
+                int rgb = bi.getRGB(w,h);
+                //bitshift magic idk
+                int r = rgb >> 16 & 0xff;
+                int g = rgb >> 8 & 0xff;
+                int b = rgb & 0xff;
+                result.setRGB(w, h, (r << 16 | b));
+            }
+        }
+        return result;
     }
 
 }

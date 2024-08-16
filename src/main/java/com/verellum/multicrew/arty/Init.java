@@ -19,6 +19,9 @@ public class Init extends Application {
     public static Path tempDir;
     public static BufferedImage template;
 
+    public static boolean debug = true;
+    public static final long TICKRATE = 1000/30;
+
     public static void initApp(){
         try {
             //chernobyl.png

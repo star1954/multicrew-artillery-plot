@@ -130,17 +130,4 @@ public class MathUtils {
         return new Point((int)(pxPoint.getX()*metersPerPixel), (int)(pxPoint.getY()*metersPerPixel));
     }
 
-    
-    /** 
-     * @return Scalar
-     * Generates a random color in RGB
-     */
-    public static Scalar randColor() {
-        int b, g, r;
-        b = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-        g = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-        r = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-        return new Scalar(b, g, r, 0);
-    }
-
 }

@@ -10,7 +10,7 @@ public class PingDetect {
     private static LinkedList<Rectangle> mediumPingList;
     private static LinkedList<Rectangle> largePingList;
 
-    public static int listSize = 15;
+    public static int listSize = 20;
     public static int maxErrSq = 9;
     public static int maxMergeSq = 9;
 

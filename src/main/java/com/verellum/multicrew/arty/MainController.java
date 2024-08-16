@@ -4,6 +4,9 @@ import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -39,6 +42,8 @@ public class MainController extends Controller {
     private double mapScaleMeters;
     private double mapScaleStuds;
     private double shellVelocity;
+
+    private LinkedList<PingController> pings;
 
     @FXML
     private GridPane gridPane;
@@ -121,7 +126,7 @@ public class MainController extends Controller {
     @FXML
     void startCapture(ActionEvent event) {
         if (Tick.getNumThreads() < 1)
-            Main.tick = new Tick(1000/30);
+            Main.tick = new Tick(Init.TICKRATE);
     }
 
     /**
@@ -201,15 +206,18 @@ public class MainController extends Controller {
 
     }
 
+    //TODO update labels with calculations
     public void updateCalc() {
         if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0)
             return;
+        
         double distance = MathUtils.distance(playerMeters, targetMeters);
         double directAngle = MathUtils.directAngle(distance, shellVelocity);
         double indirectAngle = MathUtils.indirectAngle(distance, shellVelocity);
         double directFlightTime = MathUtils.flightTime(directAngle, shellVelocity, distance);
         double indirectFlightTime = MathUtils.flightTime(indirectAngle, shellVelocity, distance);
         double maxRange = MathUtils.maxRange(shellVelocity);
+
         System.out.println("distance to target: " + distance + "m");
         System.out.println("direct angle " + directAngle + " degrees");
         System.out.println("indirect angle " + indirectAngle + " degrees");
