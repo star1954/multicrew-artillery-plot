@@ -45,7 +45,7 @@ public class Init extends Application {
      * @return Parent (JavaFX root node)
      * @throws IOException ya
      */
-    private static Parent loadFXML(String fxml, Stage stage) throws IOException {
+    public static Parent loadFXML(String fxml, Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
         Parent par = fxmlLoader.load();
         ((Controller) fxmlLoader.getController()).setStage(stage);

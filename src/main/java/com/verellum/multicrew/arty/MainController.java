@@ -4,18 +4,25 @@ import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundSize;
@@ -24,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 public class MainController extends Controller {
 
@@ -44,14 +52,33 @@ public class MainController extends Controller {
 
     private LinkedList<PingController> pingCards;
 
+    private double[] calculations = {0,0,0,0,0,0};
+
+    private AnchorPane ap;
+
+    @FXML
+    private Label azimuth;
+
     @FXML
     private Button conversionButton;
+
+    @FXML
+    private Label directElevation;
+
+    @FXML
+    private Label directTTI;
 
     @FXML
     private GridPane gridPane;
 
     @FXML
     private Pane imgParent;
+
+    @FXML
+    private Label indirectElevation;
+
+    @FXML
+    private Label indirectTTI;
 
     @FXML
     private CheckMenuItem menuSettingsDebug;
@@ -69,13 +96,10 @@ public class MainController extends Controller {
     private ScrollPane scrollPane;
 
     @FXML
-    private Button startCaptureButton;
-
-    @FXML
-    private Button stopCaptureButton;
-
-    @FXML
     private TextField studsBox;
+
+    @FXML
+    private ToggleButton toggleCaptureButton;
 
     @FXML
     private TextField velocityBox;
@@ -92,6 +116,8 @@ public class MainController extends Controller {
 
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
+
+        pingCards = new LinkedList<PingController>();
 
         gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
@@ -163,6 +189,15 @@ public class MainController extends Controller {
             updateCalc();
             velocityBox.setText(newValue);
         });
+
+        toggleCaptureButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue)
+                startCapture(null);
+            else
+                stopCapture(null);
+        });
+
+
     }
 
     @FXML
@@ -202,7 +237,7 @@ public class MainController extends Controller {
 
     @FXML
     void openAbout(ActionEvent event) {
-
+        loadFXML("ping.fxml", new double[] {110, 230, 1}, this);
     }
 
     @FXML
@@ -237,24 +272,24 @@ public class MainController extends Controller {
             Main.tick.stop();
     }
 
-    void clearPlayer() {
+    private void clearPlayer() {
         setPlayer(0, 0);
         playerCircle.setRadius(0);
     }
 
-    void clearTarget() {
+    private void clearTarget() {
         setTarget(0, 0);
         targetCircle.setRadius(0);
     }
 
-    void setTarget(double x, double y) {
+    public void setTarget(double x, double y) {
         target.setLocation(x, y);
         targetCircle.relocate(x-5, y-5);
         targetCircle.setRadius(5);
         updateCalc();
     }
 
-    void setPlayer(double x, double y) {
+    private void setPlayer(double x, double y) {
         player.setLocation(x, y);
         playerCircle.relocate(x-5, y-5);
         playerCircle.setRadius(5);
@@ -289,19 +324,46 @@ public class MainController extends Controller {
      * @param px pixel position on larger map in GUI (442x442)
      * @return position on real map image (330x330)
      */
-    public static int scaleConv(double px) {
+    private static int scaleConv(double px) {
         return (int)((px - 13) / 1.3);
     }
 
-    //TODO use callbacks for both of these
-    //TODO have appendList load cards and add to vbox with ping info
     public void appendList(double[] ping) {
-
+        loadFXML("ping.fxml", ping, this);
     }
 
-    //TODO have updatePing (called when refining a pings confidence) update the ping object in our list
     public void updatePing(int id, double[] ping) {
+        Platform.runLater(() -> {
+            pingCards.get(id).setLocation(ping);
+        });
+    }
 
+    public void removePing(int id) {
+        pingList.getChildren().remove(pingCards.get(id).getAnchorPane());
+        pingCards.remove(pingCards.get(id));
+    }
+
+    public LinkedList<PingController> getPingList() {
+        return pingCards;
+    }
+
+    private void loadFXML(String fxml, double[] location, MainController mc) {
+        System.out.println(location[0]);
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
+                AnchorPane par;
+                par = fxmlLoader.load();
+                PingController pc = (PingController) fxmlLoader.getController();
+                pingCards.add(pc);
+                pingList.getChildren().add(par);
+                pc.bindings(location, mc);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+                
+        });
+        
     }
 
     //TODO update labels with calculations
@@ -309,27 +371,33 @@ public class MainController extends Controller {
         if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0)
             return;
         
+        DecimalFormat df = new DecimalFormat("#.##");
         targetMeters = MathUtils.pxPointToMeters(new Point(scaleConv(target.getX()), scaleConv(target.getY())), 9, 330, mapScaleMeters);
         playerMeters = MathUtils.pxPointToMeters(new Point(scaleConv(player.getX()), scaleConv(player.getY())), 9, 330, mapScaleMeters);
 
-        double distance = MathUtils.distance(playerMeters, targetMeters);
-        double directAngle = MathUtils.directAngle(distance, shellVelocity);
-        double indirectAngle = MathUtils.indirectAngle(distance, shellVelocity);
-        double directFlightTime = MathUtils.flightTime(directAngle, shellVelocity, distance);
-        double indirectFlightTime = MathUtils.flightTime(indirectAngle, shellVelocity, distance);
-        double maxRange = MathUtils.maxRange(shellVelocity);
-        System.out.println("---------------------------------");
-        System.out.println("distance to target: " + distance + "m");
-        System.out.println("direct angle " + directAngle + " degrees");
-        System.out.println("indirect angle " + indirectAngle + " degrees");
-        System.out.println("direct flight time " + directFlightTime + " seconds");
-        System.out.println("indirect flight time " + indirectFlightTime + " seconds");
-        System.out.println("max range " + maxRange + "m");
+        //TODO distance to target label in FXML
+        //distance
+        calculations[0] = MathUtils.distance(playerMeters, targetMeters);
+        //direct
+        calculations[1] = MathUtils.directAngle(calculations[0], shellVelocity);
+        //indirect
+        calculations[2] = MathUtils.indirectAngle(calculations[0], shellVelocity);
+        //TTI direct
+        calculations[3] = MathUtils.flightTime(calculations[1], shellVelocity, calculations[0]);
+        //TII indirect
+        calculations[4] = MathUtils.flightTime(calculations[2], shellVelocity, calculations[0]);
+        //max range
+        calculations[5] = MathUtils.maxRange(shellVelocity);
+
+        //TODO add units
+        directElevation.setText(df.format(calculations[1]));
+        indirectElevation.setText(df.format(calculations[2]));
+        directTTI.setText(df.format(calculations[3]));
+        indirectTTI.setText(df.format(calculations[4]));
     }
 
-    //TODO consider if having a button for this makes sense even
-    public void clearCalc() {
-
+    public double getMapScaleMeters() {
+        return mapScaleMeters;
     }
 
 }

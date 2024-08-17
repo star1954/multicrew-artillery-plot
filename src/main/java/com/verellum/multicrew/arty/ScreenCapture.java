@@ -31,6 +31,7 @@ public class ScreenCapture {
      * @return BufferedImage The screen captured
      * <p> (This captures the main monitor)
      */
+    //TODO capture all valid screen devices eventually
     public BufferedImage capture() {
         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         return robot.createScreenCapture(screenRect);

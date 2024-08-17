@@ -23,7 +23,7 @@ public class Main {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         sc = new ScreenCapture();
         Init.initApp();
     }
@@ -36,8 +36,14 @@ public class Main {
         return mc;
     }
 
-    public interface Callback {
-        void call();
+    public static abstract class Callback<T, U> {
+
+        public void call(T t) {}
+
+        public void callTwo(T t, U t2) {}
+
+        public void callTypeless() {}
+
     }
 
 }

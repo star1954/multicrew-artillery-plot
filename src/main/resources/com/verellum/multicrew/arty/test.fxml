@@ -42,6 +42,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -49,6 +52,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="720.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verellum.multicrew.arty.MainController">
    <right>
@@ -59,40 +63,38 @@
                   <Label alignment="CENTER" contentDisplay="CENTER" minHeight="25.0" prefHeight="25.0" prefWidth="142.0" text="super special control panel" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="178.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="149.0">
-                     <children>
-                        <Button fx:id="screencapButton" alignment="CENTER" mnemonicParsing="false" onAction="#findMap" text="Detect Map">
-                           <VBox.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="startCaptureButton" alignment="CENTER" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#startCapture" text="Begin view capture">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="stopCaptureButton" alignment="CENTER" layoutX="26.0" layoutY="35.0" mnemonicParsing="false" onAction="#stopCapture" text="Stop view capture">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
+                  <Button fx:id="screencapButton" alignment="CENTER" minHeight="30.0" mnemonicParsing="false" onAction="#findMap" text="Detect Map">
                      <HBox.margin>
-                        <Insets />
+                        <Insets right="5.0" />
                      </HBox.margin>
-                  </VBox>
+                  </Button>
+                  <ToggleButton fx:id="toggleCaptureButton" minHeight="30.0" minWidth="30.0" mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="1.0" fitWidth="1.0" pickOnBounds="true" preserveRatio="true" scaleX="24.0" scaleY="24.0">
+                           <image>
+                              <Image url="@screenshot_monitor_16dp_5F6368_FILL0_wght500_GRAD0_opsz20.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ToggleButton>
                </children>
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
             </HBox>
             <VBox prefHeight="241.0" prefWidth="178.0">
                <children>
                   <Separator prefWidth="200.0">
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </Separator>
                   <Label alignment="CENTER" prefWidth="180.0" text="map grid scale (m)">
@@ -102,7 +104,24 @@
                   </Label>
                   <HBox alignment="TOP_CENTER" prefHeight="28.0" prefWidth="178.0">
                      <children>
-                        <TextField fx:id="metersBox" promptText="meters">
+                        <TextField fx:id="metersBox" prefHeight="25.0" prefWidth="63.0" promptText="meters">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="conversionButton" minHeight="24.0" minWidth="24.0" mnemonicParsing="false" onAction="#convert">
+                           <graphic>
+                              <ImageView fitHeight="1.0" fitWidth="1.0" pickOnBounds="true" preserveRatio="true" scaleX="16.0" scaleY="16.0">
+                                 <image>
+                                    <Image url="@chevron_left_16dp_5F6368_FILL0_wght500_GRAD0_opsz20.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <TextField fx:id="studsBox" prefHeight="25.0" prefWidth="63.0" promptText="studs">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -112,21 +131,10 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="37.0" prefHeight="28.0" prefWidth="178.0">
-                     <children>
-                        <TextField fx:id="studsBox" prefHeight="25.0" prefWidth="88.0" promptText="studs">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button fx:id="conversionButton" mnemonicParsing="false" onAction="#convert" text="convert">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <Label alignment="CENTER" layoutX="10.0" layoutY="28.0" prefWidth="180.0" text="projectile velocity (m/s)" />
+                  <Label alignment="CENTER" layoutX="10.0" layoutY="28.0" prefWidth="180.0" text="projectile velocity (m/s)">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></Label>
                   <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="50.0" prefHeight="34.0" prefWidth="178.0">
                      <children>
                         <TextField fx:id="velocityBox" promptText="meters / second">
@@ -140,9 +148,96 @@
                      </VBox.margin>
                   </HBox>
                   <Separator prefWidth="200.0" />
+                  <GridPane prefHeight="83.0" prefWidth="178.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="62.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="102.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Elevation:">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label fx:id="directElevation" text="direct">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="/">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="indirectElevation" layoutX="10.0" layoutY="10.0" text="indirect">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Label layoutX="10.0" layoutY="15.0" text="Azimuth:" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="45.0" text="ETA:" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" layoutX="73.0" layoutY="15.0" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label fx:id="directTTI" text="direct">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="/">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="indirectTTI" layoutX="10.0" layoutY="10.0" text="indirect">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label fx:id="azimuth" alignment="CENTER" text="azimuth">
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
+                     </padding>
+                  </GridPane>
                </children>
             </VBox>
-            <ScrollPane fx:id="scrollPane" prefHeight="140.0" prefWidth="168.0">
+            <ScrollPane fx:id="scrollPane" prefHeight="171.0" prefWidth="168.0">
                <content>
                   <VBox fx:id="pingList" prefHeight="200.0" prefWidth="150.0" />
                </content>

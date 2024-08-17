@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#select" onMousePressed="#press" onMouseReleased="#release" prefHeight="35.0" prefWidth="150.0" styleClass="ping" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verellum.multicrew.arty.PingController">
+   <children>
+      <Label prefHeight="0.0" prefWidth="47.0" styleClass="clearWin" text="Ping at:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="2.0" />
+      <Label fx:id="grid" layoutX="15.0" layoutY="13.0" text="A1" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="3.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="10.0" layoutY="10.0" styleClass="clearWin" text="(xm, ym)" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" fx:id="xy" />
+      <Button fx:id="deleteButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#delete" prefHeight="24.0" prefWidth="24.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <graphic>
+            <ImageView fitHeight="1.0" fitWidth="1.0" pickOnBounds="true" preserveRatio="true" scaleX="20.0" scaleY="20.0">
+               <image>
+                  <Image url="@delete_16dp_5F6368_FILL0_wght400_GRAD0_opsz20.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

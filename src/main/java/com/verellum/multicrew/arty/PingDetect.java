@@ -1,6 +1,7 @@
 package com.verellum.multicrew.arty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.Rectangle;
@@ -20,7 +21,7 @@ public class PingDetect {
         smallPingList = new LinkedList<Rectangle>();
         mediumPingList = new LinkedList<Rectangle>();
         largePingList = new LinkedList<Rectangle>();
-        filteredPings = new ArrayList<double[]>();
+        filteredPings = new LinkedList<double[]>();
     }
 
     public static void pushRects(Rectangle smallPing, Rectangle mediumPing, Rectangle largePing){
@@ -34,7 +35,7 @@ public class PingDetect {
         }
     }
 
-    public static void calcCorrelations(){
+    public static void calcCorrelations(Main.Callback<Double[], ?> callback, Main.Callback<Integer, Double[]> callback2){
         // System.out.println(filteredPings.size());
         Rectangle smallPing = null;
         Rectangle mediumPing = mediumPingList.get(0);
@@ -78,12 +79,15 @@ public class PingDetect {
 
         double[] output = {mediumPing.getCenterX(), mediumPing.getCenterY(), avgDist};
 
-        for (double[] ds : filteredPings) {
+        for (int i = 0; i < filteredPings.size(); i++) {
+            double[] ds = filteredPings.get(i);
             if(MathUtils.distanceSquared(ds[0]-output[0], ds[1]-output[1]) < maxMergeSq){
-                if(ds[2] >= output[2]){
+                if(ds[2] >= output[2]) {
                     ds[0]=output[0];
                     ds[1]=output[1];
                     ds[2]=output[2];
+                    callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
+                    // Main.getMainController().updatePing(i, output);
                 }
                 return;
             }
@@ -91,9 +95,17 @@ public class PingDetect {
 
         
         filteredPings.add(output);
+        callback.call(Arrays.stream(output).boxed().toArray(Double[]::new));
+        // Main.getMainController().appendList(output);
+
     }
 
-    public static void flush() {
+    public static void flush(Main.Callback<?, ?> callback) {
         filteredPings.clear();
+        callback.callTypeless();
+    }
+
+    public static void prune(int index) {
+        filteredPings.remove(index);
     }
 }

@@ -1,20 +1,41 @@
 package com.verellum.multicrew.arty;
 
+import java.awt.Point;
+
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+
 public class PingController extends Controller {
 
-    private final int id;
     private double[] location;
     private MainController mc;
 
-    public PingController(int id, double[] location, MainController mc) {
-        this.id = id;
-        this.location = location;
+    @FXML
+    private AnchorPane anchorPane;
+
+    @FXML
+    private Button deleteButton;
+
+    @FXML
+    private Label grid;
+
+    @FXML
+    private Label xy;
+
+    public void bindings(double[] location, MainController mc) {
         this.mc = mc;
+        setLocation(location);
     }
 
-    public int getId() {
-        return id;
+    public AnchorPane getAnchorPane() {
+        return anchorPane;
     }
+
 
     public double[] getLocation() {
         return location;
@@ -22,9 +43,34 @@ public class PingController extends Controller {
 
     public void setLocation(double[] location) {
         this.location = location;
+        System.out.println(location[0]);
+        Point metersPoint = MathUtils.pxPointToMeters(new Point((int)location[0], (int)location[1]), 9, 330, mc.getMapScaleMeters());
+        xy.setText("(" + metersPoint.x + "m, " + metersPoint.y + "m)");
+        grid.setText(MathUtils.metersPointToGrid(metersPoint, 9, mc.getMapScaleMeters()));
     }
 
-    //TODO create ping.fxml
-    //TODO have click to select, targetting ping location on main gui
-    //TODO be able to delete ping, removing from list as well as filteredPings
+    @FXML
+    void delete(ActionEvent event) {
+        System.out.println(mc.getPingList().indexOf(this));
+        PingDetect.prune(mc.getPingList().indexOf(this));
+        mc.removePing(mc.getPingList().indexOf(this));
+    }
+
+    //TODO make pingcontroller look pressed like button when moiseclick is held
+    //TODO maybe switch to eventhandler instead of 2 
+    @FXML
+    void select(MouseEvent event) {
+        mc.setTargetToPing(location);
+    }
+
+    @FXML
+    void press(MouseEvent event) {
+        anchorPane.setStyle(".pingpressed");
+    }
+
+    @FXML
+    void release(MouseEvent event) {
+        anchorPane.setStyle(".ping");
+    }
+    
 }

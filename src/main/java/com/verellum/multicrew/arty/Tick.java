@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import javafx.application.Platform;
 
 public class Tick {
 
@@ -47,6 +51,9 @@ public class Tick {
         Rectangle region1 = TemplateMatch.matchRect(noGreen, Main.pingTemplate[0]);
         //draw for debug
         Graphics2D g2d = Main.mapImage.createGraphics();
+
+        //TODO maaaaybe multithread the 3 template matches :))))))))
+
         g2d.setColor(Color.RED);
         if (Init.debug)
             g2d.drawRect(region1.x,region1.y,region1.width,region1.height);
@@ -65,8 +72,18 @@ public class Tick {
             g2d.drawRect(region3.x,region3.y,region3.width,region3.height);
 
         PingDetect.pushRects(region1, region2, region3);
-        PingDetect.calcCorrelations();
-
+        
+        PingDetect.calcCorrelations(new Main.Callback<Double[], Object>() {
+            @Override
+            public void call(Double[] output) {
+                Main.getMainController().appendList(Arrays.stream(output).mapToDouble(Double::doubleValue).toArray());
+            }
+        }, new Main.Callback<Integer, Double[]>() {
+            @Override
+            public void callTwo(Integer i, Double[] output) {
+                Main.getMainController().updatePing(i, Arrays.stream(output).mapToDouble(Double::doubleValue).toArray());
+            }
+        });
         
         for (double[] ping : PingDetect.filteredPings) {
             //andro certifiedTM one-liner
