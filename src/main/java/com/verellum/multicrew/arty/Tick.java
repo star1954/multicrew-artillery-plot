@@ -43,34 +43,29 @@ public class Tick {
      * The method to be called every update tick
      */
     private void step(){
-        //TODO: draw the rest of the owl
         Main.mapImage = Main.sc.capture(Main.mapRegion);
         
         BufferedImage noGreen = ScreenCapture.removeGreenChannel(Main.mapImage);
-        //Detect pings
-        Rectangle region1 = TemplateMatch.matchRect(noGreen, Main.pingTemplate[0]);
+
         //draw for debug
         Graphics2D g2d = Main.mapImage.createGraphics();
 
         //TODO maaaaybe multithread the 3 template matches :))))))))
 
-        g2d.setColor(Color.RED);
-        if (Init.debug)
-            g2d.drawRect(region1.x,region1.y,region1.width,region1.height);
-
-        //Detect pings
+        //Detect Pings
+        Rectangle region1 = TemplateMatch.matchRect(noGreen, Main.pingTemplate[0]);
         Rectangle region2 = TemplateMatch.matchRect(noGreen, Main.pingTemplate[1]);
-        //draw for debug
-        g2d.setColor(Color.CYAN);
-        if (Init.debug)
-            g2d.drawRect(region2.x,region2.y,region2.width,region2.height);
-
         Rectangle region3 = TemplateMatch.matchRect(noGreen, Main.pingTemplate[2]);
-        //draw for debug
-        g2d.setColor(Color.GREEN);
-        if (Init.debug)
+        
+        if (Init.debug){
+            g2d.setColor(Color.RED);
+            g2d.drawRect(region1.x,region1.y,region1.width,region1.height);
+            g2d.setColor(Color.CYAN);
+            g2d.drawRect(region2.x,region2.y,region2.width,region2.height);
+            g2d.setColor(Color.GREEN);
             g2d.drawRect(region3.x,region3.y,region3.width,region3.height);
-
+        }
+        
         PingDetect.pushRects(region1, region2, region3);
         
         PingDetect.calcCorrelations(new Main.Callback<Double[], Object>() {
@@ -89,6 +84,7 @@ public class Tick {
             //andro certifiedTM one-liner
             if (Init.debug)
                 g2d.drawOval((int)ping[0] - (int)(ping[2]*pingScale/2 + 3),(int)ping[1] - (int)(ping[2]*pingScale/2 + 3),(int)(ping[2]*pingScale + 3),(int)(ping[2]*pingScale + 3));
+            //for hovered pings
         }
         
         Main.getMainController().setImageView(Main.mapImage);

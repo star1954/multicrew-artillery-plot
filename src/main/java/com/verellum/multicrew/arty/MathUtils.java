@@ -33,6 +33,19 @@ public class MathUtils {
         return Point.distance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
+    public static double azimuth(double dx, double dy){
+        double azi = 180 - Math.atan2(dx, dy) * 180 / Math.PI;
+        if(azi < 0){
+            azi += 360;
+        }else if(azi > 360){
+            azi -= 360;
+        }
+        return azi;
+    }
+    public static double azimuth(Point p1, Point p2){
+        return azimuth(p2.getX()-p1.getX(), p2.getY()-p1.getX());
+    }
+
     /**
      * @param studs
      * @return double Distance in meters

@@ -34,3 +34,7 @@
     -fx-border-color: rgb(141, 141, 141);
     -fx-border-radius: 2px;
 }
+
+.circlenofill {
+    -fx-fill:  rgba(0,255,0,0);
+}

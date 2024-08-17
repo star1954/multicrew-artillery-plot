@@ -46,13 +46,14 @@ public class MainController extends Controller {
 
     private Circle playerCircle;
     private Circle targetCircle;
+    private Circle previewCircle;
 
     private double mapScaleMeters;
     private double shellVelocity;
 
     private LinkedList<PingController> pingCards;
 
-    private double[] calculations = {0,0,0,0,0,0};
+    private double[] calculations = {0,0,0,0,0,0,0};
 
     private AnchorPane ap;
 
@@ -110,6 +111,7 @@ public class MainController extends Controller {
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
         playerCircle = new Circle(0, Color.BLUE);
+        previewCircle = new Circle(3);
 
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
@@ -388,12 +390,15 @@ public class MainController extends Controller {
         calculations[4] = MathUtils.flightTime(calculations[2], shellVelocity, calculations[0]);
         //max range
         calculations[5] = MathUtils.maxRange(shellVelocity);
+        //azimuth
+        calculations[6] = MathUtils.azimuth(playerMeters, targetMeters);
 
         //TODO add units
         directElevation.setText(df.format(calculations[1]));
         indirectElevation.setText(df.format(calculations[2]));
         directTTI.setText(df.format(calculations[3]));
         indirectTTI.setText(df.format(calculations[4]));
+        azimuth.setText(df.format(calculations[6]));
     }
 
     public double getMapScaleMeters() {
