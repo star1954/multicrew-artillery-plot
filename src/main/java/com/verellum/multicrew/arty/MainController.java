@@ -55,7 +55,11 @@ public class MainController extends Controller {
 
     private double[] calculations = {0,0,0,0,0,0,0};
 
-    private AnchorPane ap;
+    /**
+     * its still kinda hardcoded in initialize cause the offset of 13 is the 10px margin in the map template multiplied by 1.3
+     * but it would be slightly less annoying to do window scaling now if we really wanted (i dont but if you two want it super bad i could)
+     */
+    private static double guiScaleModifier;
 
     @FXML
     private Label azimuth;
@@ -107,6 +111,7 @@ public class MainController extends Controller {
 
     @FXML
     void initialize() {
+        guiScaleModifier = (imgParent.getPrefWidth() - 13) / 330;
         target = new Point();
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
@@ -209,6 +214,7 @@ public class MainController extends Controller {
     @FXML
     void close(ActionEvent event) {
         init.stop();
+        Platform.exit();
     }
 
     @FXML
@@ -332,14 +338,12 @@ public class MainController extends Controller {
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
-    //TODO remove hardcode of 1.3 scaling modifier
     public void setTargetToPing(double[] ping) {
-        setTarget(ping[0]*1.3, ping[1]*1.3);
+        setTarget(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier);
     }
 
-    //TODO remove hardcode of 1.3 scaling modifier and ping display sizes
     public void setPreviewToPing(double[] ping) {
-        setPreview(ping[0]*1.3, ping[1]*1.3, ping[2]*5 + 2);
+        setPreview(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier, ping[2]*5 + 2);
     }
 
     /**
@@ -347,7 +351,8 @@ public class MainController extends Controller {
      * @return position on real map image (330x330)
      */
     private static int scaleConv(double px) {
-        return (int)((px - 13) / 1.3);
+        System.out.println((int)((px - (10*guiScaleModifier)) / guiScaleModifier));
+        return (int)((px - (10*guiScaleModifier)) / guiScaleModifier);
     }
 
     public void appendList(double[] ping) {
