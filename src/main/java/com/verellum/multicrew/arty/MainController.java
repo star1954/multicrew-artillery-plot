@@ -111,13 +111,17 @@ public class MainController extends Controller {
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
         playerCircle = new Circle(0, Color.BLUE);
-        previewCircle = new Circle(3);
+        previewCircle = new Circle(0, Color.CORAL);
 
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
+        previewCircle.setMouseTransparent(true);
+        
+        previewCircle.getStyleClass().add(".circlenofill");
 
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
+        imgParent.getChildren().add(previewCircle);
 
         pingCards = new LinkedList<PingController>();
 
@@ -203,12 +207,6 @@ public class MainController extends Controller {
     }
 
     @FXML
-    void clearBoth(ActionEvent event) {
-        clearPlayer();
-        clearTarget();
-    }
-
-    @FXML
     void close(ActionEvent event) {
         init.stop();
     }
@@ -274,6 +272,12 @@ public class MainController extends Controller {
             Main.tick.stop();
     }
 
+    @FXML
+    void clearBoth(ActionEvent event) {
+        clearPlayer();
+        clearTarget();
+    }
+
     private void clearPlayer() {
         setPlayer(0, 0);
         playerCircle.setRadius(0);
@@ -284,6 +288,11 @@ public class MainController extends Controller {
         targetCircle.setRadius(0);
     }
 
+    private void clearPreview() {
+        setPreview(0, 0, 0);
+    }
+
+    //TODO un-hardcode radius
     public void setTarget(double x, double y) {
         target.setLocation(x, y);
         targetCircle.relocate(x-5, y-5);
@@ -296,6 +305,11 @@ public class MainController extends Controller {
         playerCircle.relocate(x-5, y-5);
         playerCircle.setRadius(5);
         updateCalc();
+    }
+
+    private void setPreview(double x, double y, double radius) {
+        previewCircle.relocate(x-radius, y-radius);
+        previewCircle.setRadius(radius);
     }
 
     public void setInit(Init init) {
@@ -318,8 +332,14 @@ public class MainController extends Controller {
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
+    //TODO remove hardcode of 1.3 scaling modifier
     public void setTargetToPing(double[] ping) {
         setTarget(ping[0]*1.3, ping[1]*1.3);
+    }
+
+    //TODO remove hardcode of 1.3 scaling modifier and ping display sizes
+    public void setPreviewToPing(double[] ping) {
+        setPreview(ping[0]*1.3, ping[1]*1.3, ping[2]*5 + 2);
     }
 
     /**

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#select" onMousePressed="#press" onMouseReleased="#release" prefHeight="35.0" prefWidth="150.0" styleClass="ping" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verellum.multicrew.arty.PingController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#select" onMousePressed="#press" onMouseReleased="#release" onMouseEntered = "#mouseEnter" onMouseExited = "#mouseExit" prefHeight="35.0" prefWidth="150.0" styleClass="ping" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.verellum.multicrew.arty.PingController">
    <children>
       <Label prefHeight="0.0" prefWidth="47.0" styleClass="clearWin" text="Ping at:" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="2.0" />
       <Label fx:id="grid" layoutX="15.0" layoutY="13.0" text="A1" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="3.0">
