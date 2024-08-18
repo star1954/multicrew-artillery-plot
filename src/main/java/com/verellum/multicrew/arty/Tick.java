@@ -86,6 +86,9 @@ public class Tick {
                 g2d.drawOval((int)ping[0] - (int)(ping[2]*pingScale/2 + 3),(int)ping[1] - (int)(ping[2]*pingScale/2 + 3),(int)(ping[2]*pingScale + 3),(int)(ping[2]*pingScale + 3));
             //for hovered pings
         }
+
+        //Render animations
+        Main.getMainController().animatePreview(System.currentTimeMillis()*0.01);
         
         Main.getMainController().setImageView(Main.mapImage);
         g2d.dispose();

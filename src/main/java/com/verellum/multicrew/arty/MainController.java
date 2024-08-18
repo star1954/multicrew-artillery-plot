@@ -111,13 +111,17 @@ public class MainController extends Controller {
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
         playerCircle = new Circle(0, Color.BLUE);
-        previewCircle = new Circle(0, Color.CORAL);
+        previewCircle = new Circle(0);
 
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
         previewCircle.setMouseTransparent(true);
         
-        previewCircle.getStyleClass().add(".circlenofill");
+        previewCircle.setFill(new Color(0,0,0,0));
+        previewCircle.setStroke(Color.MAGENTA);
+        previewCircle.setStrokeWidth(2);
+        previewCircle.getStrokeDashArray().add(0,10d);
+        previewCircle.getStrokeDashArray().add(0,5d);
 
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
@@ -288,7 +292,7 @@ public class MainController extends Controller {
         targetCircle.setRadius(0);
     }
 
-    private void clearPreview() {
+    public void clearPreview() {
         setPreview(0, 0, 0);
     }
 
@@ -308,7 +312,7 @@ public class MainController extends Controller {
     }
 
     private void setPreview(double x, double y, double radius) {
-        previewCircle.relocate(x-radius, y-radius);
+        previewCircle.relocate(x, y);
         previewCircle.setRadius(radius);
     }
 
@@ -339,7 +343,11 @@ public class MainController extends Controller {
 
     //TODO remove hardcode of 1.3 scaling modifier and ping display sizes
     public void setPreviewToPing(double[] ping) {
-        setPreview(ping[0]*1.3, ping[1]*1.3, ping[2]*5 + 2);
+        setPreview(ping[0]*1.3, ping[1]*1.3, 10);
+    }
+
+    public void animatePreview(double time){
+        previewCircle.setStrokeDashOffset(time % 15);
     }
 
     /**
@@ -414,9 +422,10 @@ public class MainController extends Controller {
         calculations[6] = MathUtils.azimuth(playerMeters, targetMeters);
 
         //TODO add units
+        //TODO distance
         directElevation.setText(df.format(calculations[1]));
         indirectElevation.setText(df.format(calculations[2]));
-        directTTI.setText(df.format(calculations[3]));
+        directTTI.setText(df.format(calculations[3])); 
         indirectTTI.setText(df.format(calculations[4]));
         azimuth.setText(df.format(calculations[6]));
     }

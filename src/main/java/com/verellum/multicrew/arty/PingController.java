@@ -65,21 +65,21 @@ public class PingController extends Controller {
 
     @FXML
     void press(MouseEvent event) {
-        anchorPane.setStyle(".pingpressed");
+        anchorPane.setStyle("pingpressed");
     }
 
     @FXML
     void release(MouseEvent event) {
-        anchorPane.setStyle(".ping");
+        anchorPane.setStyle("ping");
     }
 
     @FXML
     void mouseEnter(MouseEvent event){
-        System.out.println("Ente");
+        mc.setPreviewToPing(location);
     }
     @FXML
     void mouseExit(MouseEvent event){
-        System.out.println("Exit");
+        mc.clearPreview();
     }
     
 }
