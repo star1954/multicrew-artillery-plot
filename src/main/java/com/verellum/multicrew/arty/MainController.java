@@ -313,19 +313,22 @@ public class MainController extends Controller {
      */
     @FXML
     void startCapture(ActionEvent event) {
-        if (Tick.getNumThreads() < 1)
-            Main.tick = new Tick(Init.TICKRATE);
+        if (TickFactory.getTickNum() < 1)
+            Main.tick = TickFactory.createTick(Init.TICKRATE);
+        else
+            TickFactory.reviveTicks();
     }
 
     /**
-     * IMMEDIATELY KILLS MAIN LOOP
+     * IMMEDIATELY KILLS ALL TICKS
+     * because if a tick thread hangs, now it can be killed rather than be inaccesible
      * 
      * @param event event of button being clicked, not important
      */
     @FXML
     void stopCapture(ActionEvent event) {
-        if (Tick.getNumThreads() == 1) 
-            Main.tick.stop();
+        //featuring fun double colon lambda shortcut cuz i wanted to learn that
+        TickFactory.stopAll();
     }
 
     private void clearPlayer() {
