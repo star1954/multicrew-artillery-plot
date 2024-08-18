@@ -2,7 +2,6 @@ package com.verellum.multicrew.arty;
 
 import java.awt.Point;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -54,8 +53,6 @@ public class PingController extends Controller {
         mc.removePing(mc.getPingList().indexOf(this));
     }
 
-    //TODO make pingcontroller look pressed like button when moiseclick is held
-    //TODO maybe switch to eventhandler instead of 2 
     @FXML
     void select(MouseEvent event) {
         mc.setTargetToPing(location);

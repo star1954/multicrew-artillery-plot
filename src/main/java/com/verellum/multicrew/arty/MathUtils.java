@@ -1,8 +1,6 @@
 package com.verellum.multicrew.arty;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -124,8 +122,6 @@ public class MathUtils {
         double theta = Math.min(45, Math.toRadians(maxElevation));
         return Math.pow(velocity, 2) * (2 * Math.sin(theta) * Math.cos(theta)) / g;
     }
-
-    //TODO azimuth calculation
 
     /**
      * @param pxPoint point in map measured in pixels
