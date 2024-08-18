@@ -295,7 +295,7 @@ public class MainController extends Controller {
 
     @FXML
     void openAbout(ActionEvent event) {
-        loadFXML("ping.fxml", new double[] {110, 230, 1}, this);
+
     }
 
     @FXML
