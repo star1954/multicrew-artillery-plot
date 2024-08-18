@@ -138,7 +138,6 @@ public class MathUtils {
 
     public static String metersPointToGrid(Point metersPoint, int gridCount, double gridSize) {
         String map = "ABCDEFGHJ";
-        double mapSize = gridSize*gridCount;
         int col = (int)(metersPoint.getX()/gridSize);
         int row = (int)(metersPoint.getY()/gridSize);
         return (map.charAt(col) + Integer.toString(row+1));
