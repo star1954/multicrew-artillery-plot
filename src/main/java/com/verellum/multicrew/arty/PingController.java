@@ -43,7 +43,6 @@ public class PingController extends Controller {
 
     public void setLocation(double[] location) {
         this.location = location;
-        System.out.println(location[0]);
         Point metersPoint = MathUtils.pxPointToMeters(new Point((int)location[0], (int)location[1]), 9, 330, mc.getMapScaleMeters());
         xy.setText("(" + metersPoint.x + "m, " + metersPoint.y + "m)");
         grid.setText(MathUtils.metersPointToGrid(metersPoint, 9, mc.getMapScaleMeters()));
@@ -51,7 +50,6 @@ public class PingController extends Controller {
 
     @FXML
     void delete(ActionEvent event) {
-        System.out.println(mc.getPingList().indexOf(this));
         PingDetect.prune(mc.getPingList().indexOf(this));
         mc.removePing(mc.getPingList().indexOf(this));
     }
@@ -65,12 +63,14 @@ public class PingController extends Controller {
 
     @FXML
     void press(MouseEvent event) {
-        anchorPane.setStyle("pingpressed");
+        System.out.println("press");
+        anchorPane.getStyleClass().setAll("pingpressed");
     }
 
     @FXML
     void release(MouseEvent event) {
-        anchorPane.setStyle("ping");
+        System.out.println("relase");
+        anchorPane.getStyleClass().setAll("ping");
     }
 
     @FXML

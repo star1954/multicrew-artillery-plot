@@ -34,8 +34,8 @@ public class MathUtils {
     }
 
     public static double azimuth(double dx, double dy){
-        double azi = 180 - Math.atan2(dy, dx) * 180 / Math.PI;
-        azi = azi % 360;
+        double azi = 180 + Math.atan2(dy, dx) * 180 / Math.PI;
+        azi = (azi+270) % 360;
         return azi;
     }
     public static double azimuth(Point p1, Point p2){

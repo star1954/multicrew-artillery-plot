@@ -1,6 +1,8 @@
 package com.verellum.multicrew.arty;
 
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +34,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class MainController extends Controller {
@@ -47,6 +51,8 @@ public class MainController extends Controller {
     private Circle playerCircle;
     private Circle targetCircle;
     private Circle previewCircle;
+
+    private Line line;
 
     private double mapScaleMeters;
     private double shellVelocity;
@@ -65,13 +71,22 @@ public class MainController extends Controller {
     private Label azimuth;
 
     @FXML
+    private Button clipboardButton;
+
+    @FXML
     private Button conversionButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private Label directElevation;
 
     @FXML
     private Label directTTI;
+
+    @FXML
+    private Label distance;
 
     @FXML
     private GridPane gridPane;
@@ -111,12 +126,16 @@ public class MainController extends Controller {
 
     @FXML
     void initialize() {
+        conversionButton.setTooltip(new Tooltip("Convert studs (right) to meters (left)"));
+        clipboardButton.setTooltip(new Tooltip("Copy calculations to clipboard"));
+        deleteButton.setTooltip(new Tooltip("Clear pings list"));
         guiScaleModifier = (imgParent.getPrefWidth() - 13) / 330;
         target = new Point();
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
         playerCircle = new Circle(0, Color.BLUE);
         previewCircle = new Circle(0);
+        line = new Line();
 
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
@@ -128,6 +147,12 @@ public class MainController extends Controller {
         previewCircle.getStrokeDashArray().add(0,10d);
         previewCircle.getStrokeDashArray().add(0,5d);
 
+        line.setStrokeWidth(2);
+        line.setStroke(Color.BLACK);
+        line.getStrokeDashArray().add(0,10d);
+        line.getStrokeDashArray().add(0,5d);
+        
+        imgParent.getChildren().add(line);
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
         imgParent.getChildren().add(previewCircle);
@@ -211,8 +236,12 @@ public class MainController extends Controller {
             else
                 stopCapture(null);
         });
+    }
 
-
+    @FXML
+    void clearBoth(ActionEvent event) {
+        clearPlayer();
+        clearTarget();
     }
 
     @FXML
@@ -226,6 +255,18 @@ public class MainController extends Controller {
         if (studsBox.getText().isEmpty()) 
             return;
         metersBox.setText(Integer.toString((int)MathUtils.studsToMeters(Integer.parseInt(studsBox.getText()))));
+    }
+
+    @FXML
+    void copyClipboard(ActionEvent event) {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+            new StringSelection(
+                "Distance: " + distance.getText() +
+                " Elevation: " + directElevation.getText() + 
+                " / " + indirectElevation.getText() + 
+                " Azimuth: " + azimuth.getText()
+            ), null
+        );
     }
 
     /**
@@ -243,6 +284,13 @@ public class MainController extends Controller {
         Main.mapRegion = region;
         BufferedImage result = ScreenCapture.cropImage(bi, region);
         setImageView(result);
+    }
+
+    @FXML
+    void flushPings(ActionEvent event) {
+        pingList.getChildren().clear();
+        pingCards.clear();
+        PingDetect.flush();
     }
 
     @FXML
@@ -282,12 +330,6 @@ public class MainController extends Controller {
             Main.tick.stop();
     }
 
-    @FXML
-    void clearBoth(ActionEvent event) {
-        clearPlayer();
-        clearTarget();
-    }
-
     private void clearPlayer() {
         setPlayer(0, 0);
         playerCircle.setRadius(0);
@@ -305,15 +347,33 @@ public class MainController extends Controller {
     //TODO un-hardcode radius
     public void setTarget(double x, double y) {
         target.setLocation(x, y);
-        targetCircle.relocate(x-5, y-5);
+        targetCircle.setCenterX(x);
+        targetCircle.setCenterY(y);
         targetCircle.setRadius(5);
+        drawLine();
         updateCalc();
+    }
+
+    private void drawLine() {
+        if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0) {
+            line.setStartX(0);
+            line.setStartY(0);
+            line.setEndX(0);
+            line.setEndY(0);
+            return;
+        }
+        line.setEndX(target.getX());
+        line.setEndY(target.getY());
+        line.setStartX(player.getX());
+        line.setStartY(player.getY());
     }
 
     private void setPlayer(double x, double y) {
         player.setLocation(x, y);
-        playerCircle.relocate(x-5, y-5);
+        playerCircle.setCenterX(x);
+        playerCircle.setCenterY(y);
         playerCircle.setRadius(5);
+        drawLine();
         updateCalc();
     }
 
@@ -347,11 +407,12 @@ public class MainController extends Controller {
     }
 
     public void setPreviewToPing(double[] ping) {
-        setPreview(ping[0]*1.3, ping[1]*1.3, 10);
+        setPreview(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier, 10);
     }
 
     public void animatePreview(double time){
         previewCircle.setStrokeDashOffset(time % 15);
+        line.setStrokeDashOffset(-time % 15);
     }
 
     /**
@@ -359,7 +420,6 @@ public class MainController extends Controller {
      * @return position on real map image (330x330)
      */
     private static int scaleConv(double px) {
-        System.out.println((int)((px - (10*guiScaleModifier)) / guiScaleModifier));
         return (int)((px - (10*guiScaleModifier)) / guiScaleModifier);
     }
 
@@ -383,7 +443,6 @@ public class MainController extends Controller {
     }
 
     private void loadFXML(String fxml, double[] location, MainController mc) {
-        System.out.println(location[0]);
         Platform.runLater(() -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
@@ -392,6 +451,7 @@ public class MainController extends Controller {
                 PingController pc = (PingController) fxmlLoader.getController();
                 pingCards.add(pc);
                 pingList.getChildren().add(par);
+                par.toBack();
                 pc.bindings(location, mc);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -401,7 +461,6 @@ public class MainController extends Controller {
         
     }
 
-    //TODO update labels with calculations
     private void updateCalc() {
         if (targetCircle.getRadius() == 0 || playerCircle.getRadius() == 0)
             return;
@@ -410,7 +469,6 @@ public class MainController extends Controller {
         targetMeters = MathUtils.pxPointToMeters(new Point(scaleConv(target.getX()), scaleConv(target.getY())), 9, 330, mapScaleMeters);
         playerMeters = MathUtils.pxPointToMeters(new Point(scaleConv(player.getX()), scaleConv(player.getY())), 9, 330, mapScaleMeters);
 
-        //TODO distance to target label in FXML
         //distance
         calculations[0] = MathUtils.distance(playerMeters, targetMeters);
         //direct
@@ -426,13 +484,12 @@ public class MainController extends Controller {
         //azimuth
         calculations[6] = MathUtils.azimuth(playerMeters, targetMeters);
 
-        //TODO add units
-        //TODO distance
-        directElevation.setText(df.format(calculations[1]));
-        indirectElevation.setText(df.format(calculations[2]));
-        directTTI.setText(df.format(calculations[3])); 
-        indirectTTI.setText(df.format(calculations[4]));
-        azimuth.setText(df.format(calculations[6]));
+        distance.setText(df.format(calculations[0])+"m");
+        directElevation.setText(df.format(calculations[1])+"°");
+        indirectElevation.setText(df.format(calculations[2])+"°");
+        directTTI.setText(df.format(calculations[3])+"s"); 
+        indirectTTI.setText(df.format(calculations[4])+"s");
+        azimuth.setText(df.format(calculations[6])+"°");
     }
 
     public double getMapScaleMeters() {

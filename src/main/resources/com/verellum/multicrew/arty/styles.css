@@ -30,7 +30,7 @@
 .pingpressed {
     -fx-background-color: 
         rgb(204, 204, 204),
-        linear-gradient(#c0c0c0 0%, #c0c0c0 75%, #b8b8b8 85%, #969696 100%);
+        linear-gradient(#dddddd 0%, #c9c9c9 75%, #c7c7c7 85%, #c1c1c1 100%);
     -fx-border-color: rgb(141, 141, 141);
     -fx-border-radius: 2px;
 }

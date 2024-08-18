@@ -36,7 +36,6 @@ public class PingDetect {
     }
 
     public static void calcCorrelations(Main.Callback<Double[], ?> callback, Main.Callback<Integer, Double[]> callback2){
-        // System.out.println(filteredPings.size());
         Rectangle smallPing = null;
         Rectangle mediumPing = mediumPingList.get(0);
         Rectangle largePing = null;
@@ -100,9 +99,8 @@ public class PingDetect {
 
     }
 
-    public static void flush(Main.Callback<?, ?> callback) {
+    public static void flush() {
         filteredPings.clear();
-        callback.callTypeless();
     }
 
     public static void prune(int index) {
