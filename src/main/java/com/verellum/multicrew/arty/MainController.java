@@ -128,6 +128,8 @@ public class MainController extends Controller {
         clipboardButton.setTooltip(new Tooltip("Copy calculations to clipboard"));
         deleteButton.setTooltip(new Tooltip("Clear pings list"));
         guiScaleModifier = (imgParent.getPrefWidth() - 13) / 330;
+
+        //Initialize location display circles and helpers
         target = new Point();
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
@@ -135,16 +137,20 @@ public class MainController extends Controller {
         previewCircle = new Circle(0);
         line = new Line();
 
+        //Disable interaction on non-GUI elements, allow passthrough of inputs to the map
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
         previewCircle.setMouseTransparent(true);
-        
+        line.setMouseTransparent(true);
+
+        //Preview circle style
         previewCircle.setFill(new Color(0,0,0,0));
         previewCircle.setStroke(Color.MAGENTA);
         previewCircle.setStrokeWidth(2);
-        previewCircle.getStrokeDashArray().add(0,10d);
-        previewCircle.getStrokeDashArray().add(0,5d);
+        previewCircle.getStrokeDashArray().add(Math.PI*5*(2d / 5d));
+        previewCircle.getStrokeDashArray().add(Math.PI*5*(3d / 5d));
 
+        //Line style
         line.setStrokeWidth(2);
         line.setStroke(Color.BLACK);
         line.getStrokeDashArray().add(0,10d);
