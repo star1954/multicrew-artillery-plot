@@ -60,13 +60,11 @@ public class PingController extends Controller {
 
     @FXML
     void press(MouseEvent event) {
-        System.out.println("press");
         anchorPane.getStyleClass().setAll("pingpressed");
     }
 
     @FXML
     void release(MouseEvent event) {
-        System.out.println("relase");
         anchorPane.getStyleClass().setAll("ping");
     }
 

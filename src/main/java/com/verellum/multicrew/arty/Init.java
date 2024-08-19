@@ -82,9 +82,7 @@ public class Init extends Application {
 
     @Override
     public void stop() {
-        if (!(Main.tick == null)) {
-            Main.tick.stop();
-        }
+        TickFactory.blowUpTheFactory();
     }
 
 }
