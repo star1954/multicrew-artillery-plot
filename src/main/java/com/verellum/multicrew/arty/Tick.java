@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bytedeco.ffmpeg.avutil.AVClass.Item_name_Pointer;
-
 public class Tick implements Runnable {
 
     private boolean isRunning = false;
