@@ -17,7 +17,7 @@ public class PingDetect {
     public static int maxMergeSq = 9;
     public static int requiredCorrelations = 3;
 
-    public static List<double[]> filteredPings;
+    public static LinkedList<double[]> filteredPings;
 
     public static void initialize() {
         smallPingList = new LinkedList<Rectangle>();
@@ -83,18 +83,18 @@ public class PingDetect {
 
         double[] output = { mediumPing.getCenterX(), mediumPing.getCenterY(), avgDist };
 
-        for (int i = 0; i < filteredPings.size(); i++) {
-            double[] ds = filteredPings.get(i);
+        int i = 0;
+        for (double[] ds : filteredPings) {
             if (MathUtils.distanceSquared(ds[0] - output[0], ds[1] - output[1]) < maxMergeSq) {
-                if (ds[2] >= output[2]) {
-                    ds[0] = output[0];
-                    ds[1] = output[1];
-                    ds[2] = output[2];
-                    callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
-                    // Main.getMainController().updatePing(i, output);
-                }
+            
+                ds[0] = output[0];
+                ds[1] = output[1];
+                ds[2] = output[2];
+                callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
+                // Main.getMainController().updatePing(i, output);
                 return;
             }
+            i++;
         }
 
         filteredPings.add(output);
@@ -136,19 +136,18 @@ public class PingDetect {
         avgDist = Math.sqrt(avgDist / count);
 
         double[] output = { basePing.getCenterX(), basePing.getCenterY(), avgDist };
-
-        for (int i = 0; i < filteredPings.size(); i++) {
-            double[] ds = filteredPings.get(i);
+        int i = 0;
+        for (double[] ds : filteredPings) {
             if (MathUtils.distanceSquared(ds[0] - output[0], ds[1] - output[1]) < maxMergeSq) {
-                if (ds[2] >= output[2]) {
-                    ds[0] = output[0];
-                    ds[1] = output[1];
-                    ds[2] = output[2];
-                    callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
-                    // Main.getMainController().updatePing(i, output);
-                }
+            
+                ds[0] = output[0];
+                ds[1] = output[1];
+                ds[2] = output[2];
+                callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
+                // Main.getMainController().updatePing(i, output);
                 return;
             }
+            i++;
         }
 
         filteredPings.add(output);
