@@ -229,10 +229,11 @@ public class MainController extends Controller {
         });
 
         toggleCaptureButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue)
+            if (newValue) {
                 startCapture(null);
-            else
+            } else {
                 stopCapture(null);
+            }
         });
     }
 
@@ -313,10 +314,13 @@ public class MainController extends Controller {
      */
     @FXML
     void startCapture(ActionEvent event) {
-        if (TickFactory.getTickNum() < 1)
+        if (TickFactory.getTickNum() < 1) {
             Main.tick = TickFactory.createTick(Init.TICKRATE);
-        else
+            screencapButton.setDisable(true);
+        } else {
             TickFactory.reviveTicks();
+            screencapButton.setDisable(true);
+        }
     }
 
     /**
@@ -329,6 +333,7 @@ public class MainController extends Controller {
     void stopCapture(ActionEvent event) {
         //featuring fun double colon lambda shortcut cuz i wanted to learn that
         TickFactory.stopAll();
+        screencapButton.setDisable(false);
     }
 
     private void clearPlayer() {
