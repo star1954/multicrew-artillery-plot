@@ -411,7 +411,7 @@ public class MainController extends Controller {
         setPreview(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier, 10);
     }
 
-    public void animatePreview(double time){
+    public void animate(double time){
         previewCircle.setStrokeDashOffset(time % 15);
         line.setStrokeDashOffset(-time % 15);
     }
