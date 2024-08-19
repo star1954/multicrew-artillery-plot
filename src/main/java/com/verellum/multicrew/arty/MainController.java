@@ -122,8 +122,15 @@ public class MainController extends Controller {
     @FXML
     private TextField velocityBox;
 
+    /**
+     * 
+     */
     @FXML
     void initialize() {
+        //Initialize variables
+        pingCards = new LinkedList<PingController>();
+
+        //Initialize tooltips
         conversionButton.setTooltip(new Tooltip("Convert studs (right) to meters (left)"));
         clipboardButton.setTooltip(new Tooltip("Copy calculations to clipboard"));
         deleteButton.setTooltip(new Tooltip("Clear pings list"));
@@ -155,14 +162,14 @@ public class MainController extends Controller {
         line.setStroke(Color.BLACK);
         line.getStrokeDashArray().add(0,10d);
         line.getStrokeDashArray().add(0,5d);
-        
+
+        //Add the elements
         imgParent.getChildren().add(line);
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
         imgParent.getChildren().add(previewCircle);
 
-        pingCards = new LinkedList<PingController>();
-
+        //Initialize the player and target set functionality
         gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double x = event.getX();
@@ -176,6 +183,7 @@ public class MainController extends Controller {
             }
         });
 
+        //Initialize the text formatter for the studs input box
         studsBox.setTextFormatter(new TextFormatter<Integer>(change -> {
             if (change.isDeleted())
                 return change;
@@ -190,20 +198,7 @@ public class MainController extends Controller {
             }
         }));
 
-        velocityBox.setTextFormatter(new TextFormatter<Integer>(change -> {
-            if (change.isDeleted())
-                return change;
-            String str = change.getControlNewText();
-            if (str.matches("0\\d+"))
-                return null;
-            try {
-                double n = Integer.parseInt(str);
-                return 0 <= n && n <= 9999 ? change : null;
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }));
-
+        //Initialize the text formatter for the meters input box
         metersBox.setTextFormatter(new TextFormatter<Integer>(change -> {
             if (change.isDeleted())
                 return change;
@@ -218,6 +213,22 @@ public class MainController extends Controller {
             }
         }));
 
+        //Initialize the text formatter for the projectile velociy box
+        velocityBox.setTextFormatter(new TextFormatter<Integer>(change -> {
+            if (change.isDeleted())
+                return change;
+            String str = change.getControlNewText();
+            if (str.matches("0\\d+"))
+                return null;
+            try {
+                double n = Integer.parseInt(str);
+                return 0 <= n && n <= 9999 ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        //Functionality for the meters input box
         metersBox.textProperty().addListener((observable, oldValue, newValue) -> {
             if (metersBox.getText().isEmpty())
                 return;
@@ -226,6 +237,7 @@ public class MainController extends Controller {
             metersBox.setText(newValue);
         });
 
+        //Functionality for the velocity input box
         velocityBox.textProperty().addListener((observable, oldValue, newValue) -> {
             if (velocityBox.getText().isEmpty())
                 return;
@@ -234,6 +246,7 @@ public class MainController extends Controller {
             velocityBox.setText(newValue);
         });
 
+        //Toggle capture button functionality
         toggleCaptureButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue)
                 startCapture(null);
@@ -242,18 +255,30 @@ public class MainController extends Controller {
         });
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void clearBoth(ActionEvent event) {
         clearPlayer();
         clearTarget();
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void close(ActionEvent event) {
         init.stop();
         Platform.exit();
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void convert(ActionEvent event) {
         if (studsBox.getText().isEmpty()) 
@@ -261,6 +286,10 @@ public class MainController extends Controller {
         metersBox.setText(Integer.toString((int)MathUtils.studsToMeters(Integer.parseInt(studsBox.getText()))));
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void copyClipboard(ActionEvent event) {
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
@@ -290,6 +319,10 @@ public class MainController extends Controller {
         setImageView(result);
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void flushPings(ActionEvent event) {
         pingList.getChildren().clear();
@@ -297,16 +330,28 @@ public class MainController extends Controller {
         PingDetect.flush();
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void openAbout(ActionEvent event) {
 
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void openHelp(ActionEvent event) {
 
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void setDebug(ActionEvent event) {
         Init.debug = menuSettingsDebug.isSelected();
@@ -351,6 +396,11 @@ public class MainController extends Controller {
         setPreview(0, 0, 0);
     }
 
+    
+    /** 
+     * @param x
+     * @param y
+     */
     //TODO un-hardcode radius
     public void setTarget(double x, double y) {
         target.setLocation(x, y);
@@ -375,6 +425,11 @@ public class MainController extends Controller {
         line.setStartY(player.getY());
     }
 
+    
+    /** 
+     * @param x
+     * @param y
+     */
     private void setPlayer(double x, double y) {
         player.setLocation(x, y);
         playerCircle.setCenterX(x);
@@ -384,19 +439,37 @@ public class MainController extends Controller {
         updateCalc();
     }
 
+    
+    /** 
+     * @param x
+     * @param y
+     * @param radius
+     */
     private void setPreview(double x, double y, double radius) {
         previewCircle.relocate(x, y);
         previewCircle.setRadius(radius);
     }
 
+    
+    /** 
+     * @param init
+     */
     public void setInit(Init init) {
         this.init = init;
     }
 
+    
+    /** 
+     * @param sc
+     */
     public void setScreenCapture(ScreenCapture sc) {
         this.sc = sc;
     }
 
+    
+    /** 
+     * @param bi
+     */
     //i had to kill the imageview, otherwise it causes refresh issues, FUCK KNOWS WHY
     public void setImageView(BufferedImage bi) {
         imgParent.setBackground(new Background(
@@ -409,14 +482,26 @@ public class MainController extends Controller {
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
+    
+    /** 
+     * @param ping
+     */
     public void setTargetToPing(double[] ping) {
         setTarget(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier);
     }
 
+    
+    /** 
+     * @param ping
+     */
     public void setPreviewToPing(double[] ping) {
         setPreview(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier, 10);
     }
 
+    
+    /** 
+     * @param time
+     */
     public void animate(double time){
         previewCircle.setStrokeDashOffset(time % 15);
         line.setStrokeDashOffset(-time % 15);
@@ -430,25 +515,48 @@ public class MainController extends Controller {
         return (int)((px - (10*guiScaleModifier)) / guiScaleModifier);
     }
 
+    
+    /** 
+     * @param ping
+     */
     public void appendList(double[] ping) {
         loadFXML("ping.fxml", ping, this);
     }
 
+    
+    /** 
+     * @param id
+     * @param ping
+     */
     public void updatePing(int id, double[] ping) {
         Platform.runLater(() -> {
             pingCards.get(id).setLocation(ping);
         });
     }
 
+    
+    /** 
+     * @param id
+     */
     public void removePing(int id) {
         pingList.getChildren().remove(pingCards.get(id).getAnchorPane());
         pingCards.remove(pingCards.get(id));
     }
 
+    
+    /** 
+     * @return LinkedList<PingController>
+     */
     public LinkedList<PingController> getPingList() {
         return pingCards;
     }
 
+    
+    /** 
+     * @param fxml
+     * @param location
+     * @param mc
+     */
     private void loadFXML(String fxml, double[] location, MainController mc) {
         Platform.runLater(() -> {
             try {
@@ -499,6 +607,10 @@ public class MainController extends Controller {
         azimuth.setText(df.format(calculations[6])+"°");
     }
 
+    
+    /** 
+     * @return double
+     */
     public double getMapScaleMeters() {
         return mapScaleMeters;
     }
