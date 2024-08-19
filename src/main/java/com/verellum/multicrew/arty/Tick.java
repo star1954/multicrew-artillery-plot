@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bytedeco.ffmpeg.avutil.AVClass.Item_name_Pointer;
-
 public class Tick implements Runnable {
 
     private boolean isRunning = false;
@@ -30,7 +28,7 @@ public class Tick implements Runnable {
     public void run() {
         if (Main.mapRegion == null)
             return;
-        while (isRunning) {
+        if (isRunning) {
             // Catch exceptions and print them out to console
             try {
                 step();
