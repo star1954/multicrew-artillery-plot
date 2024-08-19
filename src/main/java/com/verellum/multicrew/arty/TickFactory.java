@@ -17,7 +17,7 @@ public class TickFactory {
         Tick tick = new Tick();
         tick.setRunning(true);
         ticks.add(tick);
-        executor.scheduleWithFixedDelay(tick, 0, tickTime, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(tick, 0, tickTime, TimeUnit.MILLISECONDS);
         return tick;
     }
 

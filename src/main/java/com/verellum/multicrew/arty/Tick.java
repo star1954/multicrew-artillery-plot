@@ -30,7 +30,7 @@ public class Tick implements Runnable {
     public void run() {
         if (Main.mapRegion == null)
             return;
-        while (isRunning) {
+        if (isRunning) {
             // Catch exceptions and print them out to console
             try {
                 step();
