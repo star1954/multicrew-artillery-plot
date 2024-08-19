@@ -322,6 +322,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * calls appropriate methods to clear list of saved pings
      * @param event
      */
     @FXML
@@ -333,6 +334,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * opens about window
      * @param event
      */
     @FXML
@@ -342,6 +344,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * opens help guide window
      * @param event
      */
     @FXML
@@ -351,6 +354,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * toggles debug setting
      * @param event
      */
     @FXML
@@ -489,6 +493,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * sets the current target to a specific ping location
      * @param ping
      */
     public void setTargetToPing(double[] ping) {
@@ -497,6 +502,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * sets the preview circle to be on the location of a specific ping
      * @param ping
      */
     public void setPreviewToPing(double[] ping) {
@@ -522,6 +528,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * calls the method to load the ping fxml and add it to the list
      * @param ping
      */
     public void appendList(double[] ping) {
@@ -530,6 +537,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * given a ping id and new location it updates the location stored in that ping
      * @param id
      * @param ping
      */
@@ -541,6 +549,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * removes a specific ping from the list by its ID
      * @param id
      */
     public void removePing(int id) {
@@ -558,6 +567,7 @@ public class MainController extends Controller {
 
     
     /** 
+     * loads ping.fxml, adds it to the linkedlist and binds it to the maincontroller
      * @param fxml
      * @param location
      * @param mc
