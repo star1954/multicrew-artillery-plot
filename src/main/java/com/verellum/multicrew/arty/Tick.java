@@ -40,7 +40,7 @@ public class Tick implements Runnable {
 
     }
 
-    private void step() {
+    private void step() throws Exception {
         // Grab map and remove green channel
         Main.mapImage = Main.sc.capture(Main.mapRegion);
         BufferedImage noGreen = ScreenCapture.removeGreenChannel(Main.mapImage);

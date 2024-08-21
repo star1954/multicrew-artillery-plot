@@ -266,6 +266,11 @@ public class MainController extends Controller {
         clearTarget();
     }
 
+    @FXML
+    void clearMap(ActionEvent event) {
+        imgParent.setBackground(Background.EMPTY);
+    }
+
     
     /** 
      * @param event
@@ -405,6 +410,10 @@ public class MainController extends Controller {
         setPreview(0, 0, 0);
     }
 
+    public BufferedImage getBackgroundImage() {
+        return SwingFXUtils.fromFXImage(imgParent.getBackground().getImages().get(0).getImage(), null);
+    }
+
     
     /** 
      * @param x
@@ -488,6 +497,13 @@ public class MainController extends Controller {
             null, 
             new BackgroundSize(420, 420, false, false, true, true))
         ));
+        // if (!SwingFXUtils.fromFXImage(imgParent.getBackground().getImages().get(0).getImage(), null).equals(bi)) {
+        //     try {
+        //         throw new Exception();
+        //     } catch (Exception e) {
+        //         e.printStackTrace();
+        //     }
+        // }
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
