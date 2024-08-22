@@ -1,6 +1,7 @@
 package com.verellum.multicrew.arty;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.Rectangle;
@@ -25,9 +26,22 @@ public class PingDetect {
         largePingList = new LinkedList<Rectangle>();
         filteredPings = new LinkedList<double[]>();
         pingList = new LinkedList<LinkedList<Rectangle>>();
+
+        //for compat, initialize the first 3 pinglists and set their references to small, medium, and large
+        pingList.addLast(smallPingList);
+        pingList.addLast(mediumPingList);
+        pingList.addLast(largePingList);
     }
 
+    
+    /** 
+     * @param smallPing The suspected ping found using the small sized circle
+     * @param mediumPing The suspected ping found using the medium sized circle
+     * @param largePing The suspected ping found using the large sized circle
+     * Adds the given pings to the first 3 ping lists
+     */
     public static void pushRects(Rectangle smallPing, Rectangle mediumPing, Rectangle largePing) {
+        //for compat
         smallPingList.addFirst(smallPing);
         mediumPingList.addFirst(mediumPing);
         largePingList.addFirst(largePing);
@@ -38,9 +52,31 @@ public class PingDetect {
         }
     }
 
-    public static void calcCorrelations(Main.Callback<Double[], ?> callback,
-            Main.Callback<Integer, Double[]> callback2) {
-        Rectangle smallPing = null;
+    
+    /** 
+     * @param rects The list of suspected pings found
+     */
+    public static void pushRects(LinkedList<Rectangle> rects){
+     Iterator<LinkedList<Rectangle>> pingIt = pingList.iterator();
+        for (Rectangle rectangle : rects) {
+            LinkedList<Rectangle> pL = pingIt.next();
+            pL.addFirst(rectangle);
+        }
+    }
+
+    
+    /** 
+     * @param newPingCallback Callback when a new ping is found and added
+     * @param mergedPingCallback Callback when a an existing ping is found and updated
+     */
+    public static void calcCorrelations(Main.Callback<Double[], ?> newPingCallback, Main.Callback<Integer, Double[]> mergedPingCallback) {
+        if(pingList.size() >= 2){
+        Rectangle mediumPing = pingList.get(1).getFirst();
+        calcCorrelations(newPingCallback, mergedPingCallback, mediumPing);
+        }else{
+            System.out.println("a");
+        }
+        /*Rectangle smallPing = null;
         Rectangle mediumPing = mediumPingList.get(0);
         Rectangle largePing = null;
         double sPingDistSq = 0;
@@ -90,7 +126,7 @@ public class PingDetect {
                 ds[0] = output[0];
                 ds[1] = output[1];
                 ds[2] = output[2];
-                callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
+                mergedPingCallback.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
                 // Main.getMainController().updatePing(i, output);
                 return;
             }
@@ -98,12 +134,18 @@ public class PingDetect {
         }
 
         filteredPings.add(output);
-        callback.call(Arrays.stream(output).boxed().toArray(Double[]::new));
-        // Main.getMainController().appendList(output);
+        newPingCallback.call(Arrays.stream(output).boxed().toArray(Double[]::new));
+        // Main.getMainController().appendList(output);*/
 
     }
 
-    public static void calcCorrelations(Main.Callback<Double[], ?> callback, Main.Callback<Integer, Double[]> callback2,
+    
+    /**      
+     * @param newPingCallback Callback when a new ping is found and added
+     * @param mergedPingCallback Callback when a an existing ping is found and updated
+     * @param basePing The suspected ping to detect groupings around. Use the most reliable circle size for this
+     */
+    public static void calcCorrelations(Main.Callback<Double[], ?> newPingCallback, Main.Callback<Integer, Double[]> mergedPingCallback,
             Rectangle basePing) {
         // Rectangle basePing = mediumPingList.get(0);
         LinkedList<Double> pingDistSq = new LinkedList<Double>();
@@ -143,7 +185,7 @@ public class PingDetect {
                 ds[0] = output[0];
                 ds[1] = output[1];
                 ds[2] = output[2];
-                callback2.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
+                mergedPingCallback.callTwo(i, Arrays.stream(output).boxed().toArray(Double[]::new));
                 // Main.getMainController().updatePing(i, output);
                 return;
             }
@@ -151,15 +193,21 @@ public class PingDetect {
         }
 
         filteredPings.add(output);
-        callback.call(Arrays.stream(output).boxed().toArray(Double[]::new));
+        newPingCallback.call(Arrays.stream(output).boxed().toArray(Double[]::new));
         // Main.getMainController().appendList(output);
 
     }
-
+    /**
+     * Cleares the list of correlated pings
+     */
     public static void flush() {
         filteredPings.clear();
     }
 
+    
+    /** 
+     * @param index The index of the correlated ping to remove
+     */
     public static void prune(int index) {
         filteredPings.remove(index);
     }
