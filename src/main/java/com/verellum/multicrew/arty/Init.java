@@ -22,7 +22,7 @@ public class Init extends Application {
 
             //load pings
             for (int index = 0; index <= 2; index++) {
-                Main.pingTemplate[index] = ImageIO.read(Main.class.getResource("icons/circle"+ index + ".png"));
+                Main.pingTemplate[index] = ImageIO.read(Main.class.getResource("icons/circle" + index + ".png"));
             }
             
 
@@ -82,9 +82,7 @@ public class Init extends Application {
 
     @Override
     public void stop() {
-        if (!(Main.tick == null)) {
-            Main.tick.stop();
-        }
+        TickFactory.blowUpTheFactory();
     }
 
 }

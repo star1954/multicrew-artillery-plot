@@ -14,7 +14,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
@@ -35,7 +34,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 public class MainController extends Controller {
 
@@ -124,12 +122,21 @@ public class MainController extends Controller {
     @FXML
     private TextField velocityBox;
 
+    /**
+     * 
+     */
     @FXML
     void initialize() {
+        //Initialize variables
+        pingCards = new LinkedList<PingController>();
+
+        //Initialize tooltips
         conversionButton.setTooltip(new Tooltip("Convert studs (right) to meters (left)"));
         clipboardButton.setTooltip(new Tooltip("Copy calculations to clipboard"));
         deleteButton.setTooltip(new Tooltip("Clear pings list"));
         guiScaleModifier = (imgParent.getPrefWidth() - 13) / 330;
+
+        //Initialize location display circles and helpers
         target = new Point();
         player = new Point();
         targetCircle = new Circle(0, Color.RED);
@@ -137,28 +144,32 @@ public class MainController extends Controller {
         previewCircle = new Circle(0);
         line = new Line();
 
+        //Disable interaction on non-GUI elements, allow passthrough of inputs to the map
         targetCircle.setMouseTransparent(true);
         playerCircle.setMouseTransparent(true);
         previewCircle.setMouseTransparent(true);
-        
+        line.setMouseTransparent(true);
+
+        //Preview circle style
         previewCircle.setFill(new Color(0,0,0,0));
         previewCircle.setStroke(Color.MAGENTA);
         previewCircle.setStrokeWidth(2);
-        previewCircle.getStrokeDashArray().add(0,10d);
-        previewCircle.getStrokeDashArray().add(0,5d);
+        previewCircle.getStrokeDashArray().add(Math.PI*5*(2d / 5d));
+        previewCircle.getStrokeDashArray().add(Math.PI*5*(3d / 5d));
 
+        //Line style
         line.setStrokeWidth(2);
         line.setStroke(Color.BLACK);
         line.getStrokeDashArray().add(0,10d);
         line.getStrokeDashArray().add(0,5d);
-        
+
+        //Add the elements
         imgParent.getChildren().add(line);
         imgParent.getChildren().add(targetCircle);
         imgParent.getChildren().add(playerCircle);
         imgParent.getChildren().add(previewCircle);
 
-        pingCards = new LinkedList<PingController>();
-
+        //Initialize the player and target set functionality
         gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 double x = event.getX();
@@ -172,6 +183,7 @@ public class MainController extends Controller {
             }
         });
 
+        //Initialize the text formatter for the studs input box
         studsBox.setTextFormatter(new TextFormatter<Integer>(change -> {
             if (change.isDeleted())
                 return change;
@@ -186,20 +198,7 @@ public class MainController extends Controller {
             }
         }));
 
-        velocityBox.setTextFormatter(new TextFormatter<Integer>(change -> {
-            if (change.isDeleted())
-                return change;
-            String str = change.getControlNewText();
-            if (str.matches("0\\d+"))
-                return null;
-            try {
-                double n = Integer.parseInt(str);
-                return 0 <= n && n <= 9999 ? change : null;
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }));
-
+        //Initialize the text formatter for the meters input box
         metersBox.setTextFormatter(new TextFormatter<Integer>(change -> {
             if (change.isDeleted())
                 return change;
@@ -214,6 +213,22 @@ public class MainController extends Controller {
             }
         }));
 
+        //Initialize the text formatter for the projectile velociy box
+        velocityBox.setTextFormatter(new TextFormatter<Integer>(change -> {
+            if (change.isDeleted())
+                return change;
+            String str = change.getControlNewText();
+            if (str.matches("0\\d+"))
+                return null;
+            try {
+                double n = Integer.parseInt(str);
+                return 0 <= n && n <= 9999 ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        //Functionality for the meters input box
         metersBox.textProperty().addListener((observable, oldValue, newValue) -> {
             if (metersBox.getText().isEmpty())
                 return;
@@ -222,6 +237,7 @@ public class MainController extends Controller {
             metersBox.setText(newValue);
         });
 
+        //Functionality for the velocity input box
         velocityBox.textProperty().addListener((observable, oldValue, newValue) -> {
             if (velocityBox.getText().isEmpty())
                 return;
@@ -230,14 +246,20 @@ public class MainController extends Controller {
             velocityBox.setText(newValue);
         });
 
+        //Toggle capture button functionality
         toggleCaptureButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue)
+            if (newValue) {
                 startCapture(null);
-            else
+            } else {
                 stopCapture(null);
+            }
         });
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void clearBoth(ActionEvent event) {
         clearPlayer();
@@ -245,11 +267,24 @@ public class MainController extends Controller {
     }
 
     @FXML
+    void clearMap(ActionEvent event) {
+        imgParent.setBackground(Background.EMPTY);
+    }
+
+    
+    /** 
+     * @param event
+     */
+    @FXML
     void close(ActionEvent event) {
         init.stop();
         Platform.exit();
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void convert(ActionEvent event) {
         if (studsBox.getText().isEmpty()) 
@@ -257,6 +292,10 @@ public class MainController extends Controller {
         metersBox.setText(Integer.toString((int)MathUtils.studsToMeters(Integer.parseInt(studsBox.getText()))));
     }
 
+    
+    /** 
+     * @param event
+     */
     @FXML
     void copyClipboard(ActionEvent event) {
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
@@ -286,6 +325,11 @@ public class MainController extends Controller {
         setImageView(result);
     }
 
+    
+    /** 
+     * calls appropriate methods to clear list of saved pings
+     * @param event
+     */
     @FXML
     void flushPings(ActionEvent event) {
         pingList.getChildren().clear();
@@ -293,16 +337,31 @@ public class MainController extends Controller {
         PingDetect.flush();
     }
 
+    
+    /** 
+     * opens about window
+     * @param event
+     */
     @FXML
     void openAbout(ActionEvent event) {
 
     }
 
+    
+    /** 
+     * opens help guide window
+     * @param event
+     */
     @FXML
     void openHelp(ActionEvent event) {
 
     }
 
+    
+    /** 
+     * toggles debug setting
+     * @param event
+     */
     @FXML
     void setDebug(ActionEvent event) {
         Init.debug = menuSettingsDebug.isSelected();
@@ -315,19 +374,26 @@ public class MainController extends Controller {
      */
     @FXML
     void startCapture(ActionEvent event) {
-        if (Tick.getNumThreads() < 1)
-            Main.tick = new Tick(Init.TICKRATE);
+        if (TickFactory.getTickNum() < 1) {
+            Main.tick = TickFactory.createTick(Init.TICKRATE);
+            screencapButton.setDisable(true);
+        } else {
+            TickFactory.reviveTicks();
+            screencapButton.setDisable(true);
+        }
     }
 
     /**
-     * IMMEDIATELY KILLS MAIN LOOP
+     * IMMEDIATELY KILLS ALL TICKS
+     * because if a tick thread hangs, now it can be killed rather than be inaccesible
      * 
      * @param event event of button being clicked, not important
      */
     @FXML
     void stopCapture(ActionEvent event) {
-        if (Tick.getNumThreads() == 1) 
-            Main.tick.stop();
+        //featuring fun double colon lambda shortcut cuz i wanted to learn that
+        TickFactory.stopAll();
+        screencapButton.setDisable(false);
     }
 
     private void clearPlayer() {
@@ -344,6 +410,15 @@ public class MainController extends Controller {
         setPreview(0, 0, 0);
     }
 
+    public BufferedImage getBackgroundImage() {
+        return SwingFXUtils.fromFXImage(imgParent.getBackground().getImages().get(0).getImage(), null);
+    }
+
+    
+    /** 
+     * @param x
+     * @param y
+     */
     //TODO un-hardcode radius
     public void setTarget(double x, double y) {
         target.setLocation(x, y);
@@ -368,6 +443,11 @@ public class MainController extends Controller {
         line.setStartY(player.getY());
     }
 
+    
+    /** 
+     * @param x
+     * @param y
+     */
     private void setPlayer(double x, double y) {
         player.setLocation(x, y);
         playerCircle.setCenterX(x);
@@ -377,19 +457,37 @@ public class MainController extends Controller {
         updateCalc();
     }
 
+    
+    /** 
+     * @param x
+     * @param y
+     * @param radius
+     */
     private void setPreview(double x, double y, double radius) {
         previewCircle.relocate(x, y);
         previewCircle.setRadius(radius);
     }
 
+    
+    /** 
+     * @param init
+     */
     public void setInit(Init init) {
         this.init = init;
     }
 
+    
+    /** 
+     * @param sc
+     */
     public void setScreenCapture(ScreenCapture sc) {
         this.sc = sc;
     }
 
+    
+    /** 
+     * @param bi
+     */
     //i had to kill the imageview, otherwise it causes refresh issues, FUCK KNOWS WHY
     public void setImageView(BufferedImage bi) {
         imgParent.setBackground(new Background(
@@ -399,18 +497,39 @@ public class MainController extends Controller {
             null, 
             new BackgroundSize(420, 420, false, false, true, true))
         ));
+        // if (!SwingFXUtils.fromFXImage(imgParent.getBackground().getImages().get(0).getImage(), null).equals(bi)) {
+        //     try {
+        //         throw new Exception();
+        //     } catch (Exception e) {
+        //         e.printStackTrace();
+        //     }
+        // }
         // imageView.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
+    
+    /** 
+     * sets the current target to a specific ping location
+     * @param ping
+     */
     public void setTargetToPing(double[] ping) {
         setTarget(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier);
     }
 
+    
+    /** 
+     * sets the preview circle to be on the location of a specific ping
+     * @param ping
+     */
     public void setPreviewToPing(double[] ping) {
         setPreview(ping[0]*guiScaleModifier, ping[1]*guiScaleModifier, 10);
     }
 
-    public void animatePreview(double time){
+    
+    /** 
+     * @param time
+     */
+    public void animate(double time){
         previewCircle.setStrokeDashOffset(time % 15);
         line.setStrokeDashOffset(-time % 15);
     }
@@ -423,25 +542,52 @@ public class MainController extends Controller {
         return (int)((px - (10*guiScaleModifier)) / guiScaleModifier);
     }
 
+    
+    /** 
+     * calls the method to load the ping fxml and add it to the list
+     * @param ping
+     */
     public void appendList(double[] ping) {
         loadFXML("ping.fxml", ping, this);
     }
 
+    
+    /** 
+     * given a ping id and new location it updates the location stored in that ping
+     * @param id
+     * @param ping
+     */
     public void updatePing(int id, double[] ping) {
         Platform.runLater(() -> {
             pingCards.get(id).setLocation(ping);
         });
     }
 
+    
+    /** 
+     * removes a specific ping from the list by its ID
+     * @param id
+     */
     public void removePing(int id) {
         pingList.getChildren().remove(pingCards.get(id).getAnchorPane());
         pingCards.remove(pingCards.get(id));
     }
 
+    
+    /** 
+     * @return LinkedList<PingController>
+     */
     public LinkedList<PingController> getPingList() {
         return pingCards;
     }
 
+    
+    /** 
+     * loads ping.fxml, adds it to the linkedlist and binds it to the maincontroller
+     * @param fxml
+     * @param location
+     * @param mc
+     */
     private void loadFXML(String fxml, double[] location, MainController mc) {
         Platform.runLater(() -> {
             try {
@@ -492,6 +638,10 @@ public class MainController extends Controller {
         azimuth.setText(df.format(calculations[6])+"°");
     }
 
+    
+    /** 
+     * @return double
+     */
     public double getMapScaleMeters() {
         return mapScaleMeters;
     }

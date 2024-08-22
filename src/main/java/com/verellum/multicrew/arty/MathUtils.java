@@ -1,8 +1,6 @@
 package com.verellum.multicrew.arty;
 
 import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -125,8 +123,6 @@ public class MathUtils {
         return Math.pow(velocity, 2) * (2 * Math.sin(theta) * Math.cos(theta)) / g;
     }
 
-    //TODO azimuth calculation
-
     /**
      * @param pxPoint point in map measured in pixels
      * @param gridCount number of grid cells on the map
@@ -142,7 +138,6 @@ public class MathUtils {
 
     public static String metersPointToGrid(Point metersPoint, int gridCount, double gridSize) {
         String map = "ABCDEFGHJ";
-        double mapSize = gridSize*gridCount;
         int col = (int)(metersPoint.getX()/gridSize);
         int row = (int)(metersPoint.getY()/gridSize);
         return (map.charAt(col) + Integer.toString(row+1));

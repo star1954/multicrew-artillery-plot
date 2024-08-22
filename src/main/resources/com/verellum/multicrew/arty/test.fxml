@@ -45,6 +45,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -352,7 +353,15 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Settings">
             <items>
-                  <CheckMenuItem fx:id="menuSettingsDebug" mnemonicParsing="false" onAction="#setDebug" text="Debug" />
+                  <CheckMenuItem fx:id="menuSettingsDebug" mnemonicParsing="false" onAction="#setDebug" text="Debug">
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></CheckMenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#clearMap" text="Clear Map Image">
+                     <accelerator>
+                        <KeyCodeCombination alt="DOWN" code="C" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
