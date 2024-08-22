@@ -1,5 +1,6 @@
 package com.verellum.multicrew.arty;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -54,6 +55,11 @@ public class PingDetect {
         pingIt.next().addFirst(smallPing);
         pingIt.next().addFirst(mediumPing);
         pingIt.next().addFirst(largePing);
+        for (LinkedList<Rectangle> pings : pingList) {
+            if (pings.size() > listSize){
+                pings.removeLast();
+            }
+        }
     }
 
     
@@ -153,12 +159,11 @@ public class PingDetect {
             Rectangle basePing) {
         // Rectangle basePing = mediumPingList.get(0);
         LinkedList<Double> pingDistSq = new LinkedList<Double>();
-        LinkedList<Rectangle> correlations = new LinkedList<Rectangle>();
+        ArrayList<Rectangle> correlations = new ArrayList<Rectangle>();
 
         for (LinkedList<Rectangle> pings : pingList) {
             for (Rectangle ping : pings) {
-                double distSq = MathUtils.distanceSquared(ping.getCenterX() - basePing.getCenterX(),
-                        ping.getCenterY() - basePing.getCenterY());
+                double distSq = MathUtils.distanceSquared(ping.getCenterX() - basePing.getCenterX(), ping.getCenterY() - basePing.getCenterY());
                 if (distSq <= maxErrSq && distSq != 0) {
                     correlations.addLast(ping);
                     pingDistSq.addLast(distSq);
