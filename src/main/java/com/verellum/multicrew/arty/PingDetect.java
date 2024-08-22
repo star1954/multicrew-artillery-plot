@@ -17,7 +17,7 @@ public class PingDetect {
     public static int listSize = 55;
     public static int maxErrSq = 9;
     public static int maxMergeSq = 9;
-    public static int requiredCorrelations = 3;
+    public static int requiredCorrelations = 2; //should be 1 less than the number of rectangles that match
 
     public static LinkedList<double[]> filteredPings;
 
