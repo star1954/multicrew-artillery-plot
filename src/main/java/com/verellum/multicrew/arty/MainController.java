@@ -366,13 +366,37 @@ public class MainController extends Controller {
     void setDebug(ActionEvent event) {
         Init.debug = menuSettingsDebug.isSelected();
     }
+
+    @FXML
+    void setScale1(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setScale125(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setScale15(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setScale175(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setScale2(ActionEvent event) {
+
+    }
     
     /**
      * starts main loop
      * 
      * @param event event of button being clicked, not important
      */
-    @FXML
     void startCapture(ActionEvent event) {
         if (TickFactory.getTickNum() < 1) {
             Main.tick = TickFactory.createTick(Init.TICKRATE);

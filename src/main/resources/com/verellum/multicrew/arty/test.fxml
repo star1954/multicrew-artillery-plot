@@ -39,10 +39,12 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
@@ -351,9 +353,9 @@
               <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Settings">
+          <Menu mnemonicParsing="false" text="Debug">
             <items>
-                  <CheckMenuItem fx:id="menuSettingsDebug" mnemonicParsing="false" onAction="#setDebug" text="Debug">
+                  <CheckMenuItem fx:id="menuSettingsDebug" mnemonicParsing="false" onAction="#setDebug" text="Template Match Boxes">
                      <accelerator>
                         <KeyCodeCombination alt="DOWN" code="D" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></CheckMenuItem>
@@ -364,6 +366,23 @@
                   </MenuItem>
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+               <items>
+                  <Menu mnemonicParsing="false" text="Windows Scaling Factor">
+                    <items>
+                        <RadioMenuItem mnemonicParsing="false" onAction="#setScale1" selected="true" text="1">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="scales" />
+                           </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem mnemonicParsing="false" onAction="#setScale125" text="1.25" toggleGroup="$scales" />
+                        <RadioMenuItem mnemonicParsing="false" onAction="#setScale15" text="1.5" toggleGroup="$scales" />
+                        <RadioMenuItem mnemonicParsing="false" onAction="#setScale175" text="1.75" toggleGroup="$scales" />
+                        <RadioMenuItem mnemonicParsing="false" onAction="#setScale2" text="2" toggleGroup="$scales" />
+                    </items>
+                  </Menu>
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openHelp" text="Calc Help" />
