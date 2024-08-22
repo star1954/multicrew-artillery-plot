@@ -309,7 +309,7 @@
    <center>
       <Pane fx:id="imgParent" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="442.0" prefWidth="442.0" styleClass="grid" BorderPane.alignment="CENTER">
          <children>
-            <GridPane fx:id="gridPane" gridLinesVisible="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="442.0" styleClass="grid">
+            <GridPane fx:id="gridPane" gridLinesVisible="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="442.0" styleClass="grid" visible="false">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
